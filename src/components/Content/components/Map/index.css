@@ -1,0 +1,7 @@
+#root-map {
+  height: 100%;
+}
+
+.leaflet-div-icon {
+  border-radius: 100%;
+}
