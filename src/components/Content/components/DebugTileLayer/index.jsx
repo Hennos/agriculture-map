@@ -1,6 +1,6 @@
 import React from "react";
 import L from "leaflet";
-import { GridLayer } from "react-leaflet";
+import { GridLayer, withLeaflet } from "react-leaflet";
 
 L.GridLayer.Debug = L.GridLayer.extend({
   createTile: coords => {
@@ -27,4 +27,4 @@ class DebugTileLayer extends GridLayer {
   }
 }
 
-export default DebugTileLayer;
+export default withLeaflet(DebugTileLayer);

@@ -1,7 +1,7 @@
 {
   "name": "agriculture-map",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.2.0",
+  "private": false,
   "dependencies": {
     "classnames": "^2.2.6",
     "immutable": "^3.8.2",
@@ -10,7 +10,7 @@
     "prop-types": "^15.6.2",
     "react": "^16.5.2",
     "react-dom": "^16.4.2",
-    "react-leaflet": "^1.9.1",
+    "react-leaflet": "^2.2.1",
     "react-leaflet-draw": "^0.18.0",
     "react-redux": "^5.0.7",
     "react-scripts": "2.1.5",
