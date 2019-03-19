@@ -1,11 +1,15 @@
 import { keys, events } from "./constants";
 import initialState from "./initialState";
 
-function handleSetBoundGeometry(prevState, { geometry }) {
-  return prevState.set(keys.boundsGeometry, geometry);
+function handleSetLayer(prevState, { layer }) {
+  const prevLayers = prevState.get(keys.layers);
+  const updateLayers = prevLayers
+    .filter(prevLayer => prevLayer !== layer)
+    .push(layer);
+  return prevState.set(keys.layers, updateLayers);
 }
 
-const handlers = new Map([[events.setBoundsGeometry, handleSetBoundGeometry]]);
+const handlers = new Map([[events.setLayer, handleSetLayer]]);
 
 export default function(state = initialState, action) {
   const handleAction = handlers.get(action.type);

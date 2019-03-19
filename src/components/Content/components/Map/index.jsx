@@ -1,10 +1,15 @@
-import React from "react";
-import { Map as LeafletMap, TileLayer } from "react-leaflet";
-import L from "leaflet";
+import React from 'react';
+import PropTypes from 'prop-types';
+import L from 'leaflet';
+import { Map as LeafletMap, TileLayer, FeatureGroup } from 'react-leaflet';
+import { connect } from 'react-redux';
 
-// import DebugTileLayer from "../DebugTileLayer";
+import './index.css';
 
-import "./index.css";
+import { keys } from '../../../../store/mapData/constants';
+import { setLayers } from '../../../../store/mapData/actions';
+
+import MapLayerPresenter from '../MapLayerPresenter';
 
 class Map extends React.Component {
   constructor(props) {
@@ -17,9 +22,11 @@ class Map extends React.Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:3001/config")
+    const { setMapLayers } = this.props;
+    fetch('http://localhost:3001/config')
       .then(response => {
-        response.json().then(({ mapWidth, mapHeight, maxZoom }) => {
+        response.json().then(({ mapWidth, mapHeight, maxZoom, layers }) => {
+          setMapLayers(layers);
           this.setState({
             loaded: true,
             config: {
@@ -36,11 +43,14 @@ class Map extends React.Component {
   }
 
   getMaxBounds() {
-    const { width, height } = this.state.config;
+    const {
+      config: { width, height }
+    } = this.state;
     return new L.LatLngBounds([0, width], [-height, 0]);
   }
 
   render() {
+    const { layers } = this.props;
     const { loaded, config } = this.state;
     return (
       loaded && (
@@ -55,11 +65,32 @@ class Map extends React.Component {
           maxBoundsViscosity={1.0}
           zoomControl={false}
         >
-          <TileLayer url="http://localhost:3001/tiles/{z}/{y}/{x}" />
+          <TileLayer url="http://localhost:3001/tiles/{z}/{x}/{y}" />
+          <FeatureGroup>
+            {layers.map(layer => (
+              <MapLayerPresenter key={layer} presented={layer} />
+            ))}
+          </FeatureGroup>
         </LeafletMap>
       )
     );
   }
 }
 
-export default Map;
+Map.propTypes = {
+  layers: PropTypes.arrayOf(PropTypes.string).isRequired,
+  setMapLayers: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({
+  layers: state.mapData.get(keys.layers).toArray()
+});
+
+const mapDispatchToProps = dispatch => ({
+  setMapLayers: layers => dispatch(setLayers(layers))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Map);

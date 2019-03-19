@@ -1,7 +1,11 @@
-import createPresenter from "../createPresenter";
+import createPresenter from '../createPresenter';
+import { layers as types } from '../../../../store/mapLayers/constants';
 
-const presented = {};
+import ImpassableAreas from '../ImpassableAreas';
 
-const DataLayerPresenter = createPresenter(presented);
+const layers = {};
+layers[types.impassableAreas] = ImpassableAreas;
 
-export default DataLayerPresenter;
+const MapLayersPresenter = createPresenter(layers);
+
+export default MapLayersPresenter;

@@ -1,11 +1,11 @@
-import { combineReducers } from "redux";
+import { combineReducers } from 'redux';
 
-import loader from "./loader/reducer";
-import mapData from "./mapData/reducer";
+import mapData from './mapData/reducer';
+import impassableAreasLayer from './impassableAreaLayer/reducer';
 
 const rootReducer = combineReducers({
-  loader,
-  mapData
+  mapData,
+  impassableAreasLayer
 });
 
 export default rootReducer;

@@ -1,33 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import React from "react";
+import PropTypes from "prop-types";
 
-import './index.css';
+import "./index.css";
 
-import { requestLoadAppData } from '../../store/loader/actions';
+import Content from "../Content";
 
-import Content from '../Content';
+const App = () => (
+  <div className="map-application">
+    <Content stylization="map-application-content map-application-fragment" />
+  </div>
+);
 
-class App extends React.Component {
-  componentDidMount() {
-    this.props.onLoadAppData();
-  }
-
-  render() {
-    return (
-      <div className="map-application">
-        <Content stylization="map-application-content map-application-fragment" />
-      </div>
-    );
-  }
-}
-
-App.propTypes = {
-  onLoadAppData: PropTypes.func.isRequired,
-};
-
-const mapDispatchToProps = dispatch => ({
-  onLoadAppData: () => dispatch(requestLoadAppData()),
-});
-
-export default connect(undefined, mapDispatchToProps)(App);
+export default App;

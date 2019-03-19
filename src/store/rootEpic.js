@@ -1,7 +1,8 @@
-import { combineEpics } from "redux-observable";
+import { combineEpics } from 'redux-observable';
 
-import loader from "./loader/epic";
+import mapLayers from './mapLayers/epic';
+import impassableAreasLayer from './impassableAreaLayer/epic';
 
-const rootEpic = loader;
+const rootEpic = combineEpics(mapLayers, impassableAreasLayer);
 
 export default rootEpic;

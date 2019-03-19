@@ -1,9 +1,10 @@
 const events = Object.freeze({
-  setBoundsGeometry: "@@MAP_DATA:SET_BOUNDS_GEOMETRY"
+  setLayers: "@@MAP_DATA:SET_LAYERS",
+  setLayer: "@@MAP_DATA:SET_LAYER"
 });
 
 const keys = Object.freeze({
-  boundsGeometry: "boundsGeometry"
+  layers: "layers"
 });
 
 export { events, keys };
