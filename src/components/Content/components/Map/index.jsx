@@ -9,7 +9,7 @@ import './index.css';
 import { keys } from '../../../../store/mapData/constants';
 import { setLayers } from '../../../../store/mapData/actions';
 
-import MapLayerPresenter from '../MapLayerPresenter';
+import MapLayersPresenter from '../MapLayersPresenter';
 
 class Map extends React.Component {
   constructor(props) {
@@ -68,7 +68,7 @@ class Map extends React.Component {
           <TileLayer url="http://localhost:3001/tiles/{z}/{x}/{y}" />
           <FeatureGroup>
             {layers.map(layer => (
-              <MapLayerPresenter key={layer} presented={layer} />
+              <MapLayersPresenter key={layer} presented={layer} />
             ))}
           </FeatureGroup>
         </LeafletMap>

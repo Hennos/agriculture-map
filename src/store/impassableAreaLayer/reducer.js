@@ -3,26 +3,13 @@ import Immutable from 'immutable';
 import { keys, events } from './constants';
 import initialState from './initialState';
 
-import { createId } from './helpers/createId';
-
-const nextId = createId();
-
 function handleLoadData(prevState, { data }) {
-  const preparedData = data.map(({ type, coordinates }) => ({
-    id: nextId(),
+  const preparedData = data.map(({ id, type, coordinates }) => ({
+    id,
     type,
     coordinates
   }));
   return prevState.set(keys.status, 'ready').set(keys.data, Immutable.List(preparedData));
-}
-
-function handleCreateArea(prevState, { area: { type, coordinates } }) {
-  const updatedData = prevState.get(keys.data).push({
-    id: nextId(),
-    type,
-    coordinates
-  });
-  return prevState.set(keys.data, updatedData);
 }
 
 function handleUpdateAreas(prevState, { areas }) {
@@ -41,7 +28,6 @@ function handleRemoveAreas(prevState, { areas }) {
 
 const handlers = new Map([
   [events.successLoadData, handleLoadData],
-  [events.createArea, handleCreateArea],
   [events.updateAreas, handleUpdateAreas],
   [events.removeAreas, handleRemoveAreas]
 ]);

@@ -1,21 +1,17 @@
-import { flatMap } from "rxjs/operators";
-import { ofType } from "redux-observable";
+import { flatMap } from 'rxjs/operators';
+import { ofType } from 'redux-observable';
 
-import { layers } from "./constants";
-import { requestImpassableAreasLayer } from "./actions";
-import { events as mapDataEvents } from "../mapData/constants";
+import { layers as layerType } from './constants';
+import { requestImpassableAreasLayer } from './actions';
+import { events as mapDataEvents } from '../mapData/constants';
 
-const requests = new Map([
-  [layers.impassableAreas, requestImpassableAreasLayer()]
-]);
+const requests = new Map([[layerType.impassableAreas, requestImpassableAreasLayer()]]);
 
 const requestLayersEpic = action$ =>
   action$.pipe(
     ofType(mapDataEvents.setLayers),
     flatMap(({ layers }) =>
-      layers
-        .filter(layer => requests.has(layer))
-        .map(layer => requests.get(layer))
+      layers.filter(layer => requests.has(layer)).map(layer => requests.get(layer))
     )
   );
 

@@ -1,9 +1,8 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
 
-import "./index.css";
+import './index.css';
 
-import Content from "../Content";
+import Content from '../Content';
 
 const App = () => (
   <div className="map-application">

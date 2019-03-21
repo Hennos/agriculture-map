@@ -1,4 +1,4 @@
-import { events } from "./constants";
+import { events } from './constants';
 
 export const requestImpassableAreasLayer = () => ({
   type: events.requestImpassableAreasLayer
