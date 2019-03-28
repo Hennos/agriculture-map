@@ -13,7 +13,7 @@ ReactDOM.render(
   <Provider store={store}>
     <App />
   </Provider>,
-  document.getElementById('interactiveMapRoot'),
+  document.getElementById('interactiveMapRoot')
 );
 
 registerServiceWorker();

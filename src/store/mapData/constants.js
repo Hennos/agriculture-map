@@ -1,10 +1,10 @@
 const events = Object.freeze({
-  setLayers: "@@MAP_DATA:SET_LAYERS",
-  setLayer: "@@MAP_DATA:SET_LAYER"
+  setLayers: '@@MAP_DATA:SET_LAYERS',
+  setLayer: '@@MAP_DATA:SET_LAYER'
 });
 
 const keys = Object.freeze({
-  layers: "layers"
+  layers: 'layers'
 });
 
 export { events, keys };

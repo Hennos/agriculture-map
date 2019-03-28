@@ -1,4 +1,4 @@
-import { events } from "./constants";
+import { events } from './constants';
 
 export const setLayers = layers => ({
   type: events.setLayers,
