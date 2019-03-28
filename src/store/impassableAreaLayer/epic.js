@@ -55,13 +55,12 @@ const postCreateObjectEpic = action$ =>
       ajax({
         url: postCreateObjectURI,
         method: 'POST',
-        crossDomain: true,
         body: createBodyCreateObject(created),
         headers: {
           'Content-Type': 'application/json'
         }
       }).pipe(
-        flatMap([requestData(), successPostData()]),
+        flatMap(response => [requestData(), successPostData(response)]),
         catchError(error => of(errorPostData(error)))
       )
     )
