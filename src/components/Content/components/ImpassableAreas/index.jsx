@@ -12,6 +12,8 @@ import {
   removeAreas
 } from '../../../../store/impassableAreaLayer/actions';
 
+import MapBadge from '../MapBadge';
+
 class ImpassableAreas extends React.Component {
   onCreateArea = layer => {
     const { pushCreatedArea } = this.props;
@@ -53,7 +55,7 @@ class ImpassableAreas extends React.Component {
   };
 
   render() {
-    const { areas } = this.props;
+    const { editable, areas } = this.props;
 
     const Areas = () =>
       areas.map(({ id, coordinates }) => <Polygon key={id} id={id} positions={coordinates} />);
@@ -61,25 +63,28 @@ class ImpassableAreas extends React.Component {
     return (
       <FeatureGroup>
         <Areas />
-        <EditControl
-          position="topright"
-          onCreated={({ layer }) => this.onCreateArea(layer)}
-          onEdited={({ layers }) => this.onEditAreas(layers)}
-          onDeleted={({ layers }) => this.onRemoveArea(layers)}
-          draw={{
-            polygon: {
-              shapeOptions: {
-                color: 'red'
+        {editable && <MapBadge position="topright" title="Непроходимые области" />}
+        {editable && (
+          <EditControl
+            position="topright"
+            onCreated={({ layer }) => this.onCreateArea(layer)}
+            onEdited={({ layers }) => this.onEditAreas(layers)}
+            onDeleted={({ layers }) => this.onRemoveArea(layers)}
+            draw={{
+              polygon: {
+                shapeOptions: {
+                  color: 'red'
+                },
+                showArea: true
               },
-              showArea: true
-            },
-            polyline: false,
-            rectangle: false,
-            circle: false,
-            circlemarker: false,
-            marker: false
-          }}
-        />
+              polyline: false,
+              rectangle: false,
+              circle: false,
+              circlemarker: false,
+              marker: false
+            }}
+          />
+        )}
       </FeatureGroup>
     );
   }
@@ -94,7 +99,12 @@ ImpassableAreas.propTypes = {
   areas: PropTypes.arrayOf(PropTypes.shape(areaType)).isRequired,
   pushCreatedArea: PropTypes.func.isRequired,
   pushUpdatedAreas: PropTypes.func.isRequired,
-  pushRemoveArea: PropTypes.func.isRequired
+  pushRemoveArea: PropTypes.func.isRequired,
+  editable: PropTypes.bool
+};
+
+ImpassableAreas.defaultProps = {
+  editable: false
 };
 
 const mapStateToProps = ({ impassableAreasLayer }) => ({

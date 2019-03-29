@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { FeatureGroup, Polyline } from 'react-leaflet';
-// import { EditControl } from 'react-leaflet-draw';
+import { EditControl } from 'react-leaflet-draw';
 
 import { keys as layerKeys } from '../../../../store/platformTracksLayer/constants';
 import {
@@ -12,13 +12,15 @@ import {
   removeTracks
 } from '../../../../store/platformTracksLayer/actions';
 
+import MapBadge from '../MapBadge';
+
 class PlatformTracks extends React.Component {
   onCreateTrack = layer => {
     const { pushCreateTrack } = this.props;
     const {
       geometry: { type }
     } = layer.toGeoJSON();
-    const coordinates = layer.getLatLngs()[0].map(({ lat, lng }) => [lat, lng]);
+    const coordinates = layer.getLatLngs().map(({ lat, lng }) => [lat, lng]);
     pushCreateTrack({
       type,
       coordinates
@@ -33,7 +35,7 @@ class PlatformTracks extends React.Component {
       const {
         geometry: { type }
       } = layer.toGeoJSON();
-      const coordinates = layer.getLatLngs()[0].map(({ lat, lng }) => [lat, lng]);
+      const coordinates = layer.getLatLngs().map(({ lat, lng }) => [lat, lng]);
       tracks.push({
         id: layer.options.id,
         type,
@@ -53,7 +55,7 @@ class PlatformTracks extends React.Component {
   };
 
   render() {
-    const { tracks } = this.props;
+    const { editable, tracks } = this.props;
 
     const Tracks = () =>
       tracks.map(({ id, coordinates }) => (
@@ -63,24 +65,27 @@ class PlatformTracks extends React.Component {
     return (
       <FeatureGroup>
         <Tracks />
-        {/* <EditControl
-          position="topright"
-          onCreated={({ layer }) => this.onCreateTrack(layer)}
-          onEdited={({ layers }) => this.onEditTracks(layers)}
-          onDeleted={({ layers }) => this.onRemoveTracks(layers)}
-          draw={{
-            polyline: {
-              shapeOptions: {
-                color: 'red'
-              }
-            },
-            polygon: false,
-            rectangle: false,
-            circle: false,
-            circlemarker: false,
-            marker: false
-          }}
-        /> */}
+        {editable && <MapBadge position="topright" title="Траектории пути платформ" />}
+        {editable && (
+          <EditControl
+            position="topright"
+            onCreated={({ layer }) => this.onCreateTrack(layer)}
+            onEdited={({ layers }) => this.onEditTracks(layers)}
+            onDeleted={({ layers }) => this.onRemoveTracks(layers)}
+            draw={{
+              polyline: {
+                shapeOptions: {
+                  color: 'red'
+                }
+              },
+              polygon: false,
+              rectangle: false,
+              circle: false,
+              circlemarker: false,
+              marker: false
+            }}
+          />
+        )}
       </FeatureGroup>
     );
   }
@@ -95,7 +100,12 @@ PlatformTracks.propTypes = {
   tracks: PropTypes.arrayOf(PropTypes.shape(trackType)).isRequired,
   pushCreateTrack: PropTypes.func.isRequired,
   pushUpdateTracks: PropTypes.func.isRequired,
-  pushRemoveTracks: PropTypes.func.isRequired
+  pushRemoveTracks: PropTypes.func.isRequired,
+  editable: PropTypes.bool
+};
+
+PlatformTracks.defaultProps = {
+  editable: false
 };
 
 const mapStateToProps = ({ platformTracksLayer }) => ({

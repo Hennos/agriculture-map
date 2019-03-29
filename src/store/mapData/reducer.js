@@ -3,11 +3,22 @@ import initialState from './initialState';
 
 function handleSetLayer(prevState, { layer }) {
   const prevLayers = prevState.get(keys.layers);
-  const updateLayers = prevLayers.filter(prevLayer => prevLayer !== layer).push(layer);
-  return prevState.set(keys.layers, updateLayers);
+  const updatedLayers = prevLayers.filter(prevLayer => prevLayer !== layer).push(layer);
+  return prevState.set(keys.layers, updatedLayers);
 }
 
-const handlers = new Map([[events.setLayer, handleSetLayer]]);
+function handleSetEditableLayer(prevState, { layer }) {
+  const prevLayers = prevState.get(keys.layers);
+  if (!prevLayers.includes(layer)) {
+    return prevState;
+  }
+  return prevState.set(keys.editableLayer, layer);
+}
+
+const handlers = new Map([
+  [events.setLayer, handleSetLayer],
+  [events.setEditableLayer, handleSetEditableLayer]
+]);
 
 export default function(state = initialState, action) {
   const handleAction = handlers.get(action.type);

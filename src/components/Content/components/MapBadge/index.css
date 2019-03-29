@@ -1,0 +1,12 @@
+.map-badge {
+  display: flex;
+  align-items: center;
+  height: 30px;
+  padding-left: 8px;
+  padding-right: 8px;
+  background-color: white;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  background-clip: padding-box;
+  box-sizing: content-box;
+  border-radius: 4px;
+}

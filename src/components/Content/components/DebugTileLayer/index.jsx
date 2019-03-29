@@ -11,17 +11,9 @@ L.GridLayer.Debug = L.GridLayer.extend({
   }
 });
 
-L.gridLayer.debug = () => {
-  return new L.GridLayer.Debug();
-};
-
 class DebugTileLayer extends GridLayer {
-  componentDidMount() {
-    super.componentDidMount();
-  }
-
   createLeafletElement() {
-    return new L.gridLayer.debug();
+    return new L.GridLayer.Debug();
   }
 }
 

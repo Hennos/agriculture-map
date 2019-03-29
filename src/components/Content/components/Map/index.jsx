@@ -7,8 +7,9 @@ import { connect } from 'react-redux';
 import './index.css';
 
 import { keys } from '../../../../store/mapData/constants';
-import { setLayers } from '../../../../store/mapData/actions';
+import { setLayers, setEditableLayer } from '../../../../store/mapData/actions';
 
+import EditableLayerControl from '../EditableLayerControl';
 import MapLayersPresenter from '../MapLayersPresenter';
 
 class Map extends React.Component {
@@ -50,7 +51,7 @@ class Map extends React.Component {
   }
 
   render() {
-    const { layers } = this.props;
+    const { layers, editableLayer, chooseEditableLayer } = this.props;
     const { loaded, config } = this.state;
     return (
       loaded && (
@@ -66,9 +67,21 @@ class Map extends React.Component {
           zoomControl={false}
         >
           <TileLayer url="http://localhost:3001/tiles/{z}/{x}/{y}" />
+          {layers.length && (
+            <EditableLayerControl
+              position="topright"
+              editable={editableLayer}
+              layers={layers}
+              onChooseEditableLayer={chooseEditableLayer}
+            />
+          )}
           <FeatureGroup>
             {layers.map(layer => (
-              <MapLayersPresenter key={layer} presented={layer} />
+              <MapLayersPresenter
+                key={layer}
+                presented={layer}
+                editable={layer === editableLayer}
+              />
             ))}
           </FeatureGroup>
         </LeafletMap>
@@ -78,16 +91,24 @@ class Map extends React.Component {
 }
 
 Map.propTypes = {
+  editableLayer: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
   layers: PropTypes.arrayOf(PropTypes.string).isRequired,
-  setMapLayers: PropTypes.func.isRequired
+  setMapLayers: PropTypes.func.isRequired,
+  chooseEditableLayer: PropTypes.func.isRequired
+};
+
+Map.defaultProps = {
+  editableLayer: null
 };
 
 const mapStateToProps = state => ({
-  layers: state.mapData.get(keys.layers).toArray()
+  layers: state.mapData.get(keys.layers).toArray(),
+  editableLayer: state.mapData.get(keys.editableLayer)
 });
 
 const mapDispatchToProps = dispatch => ({
-  setMapLayers: layers => dispatch(setLayers(layers))
+  setMapLayers: layers => dispatch(setLayers(layers)),
+  chooseEditableLayer: layer => dispatch(setEditableLayer(layer))
 });
 
 export default connect(
