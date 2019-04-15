@@ -17,7 +17,7 @@ function handleLoadData(prevState, { data }) {
 function handleUpdateTracks(prevState, { tracks }) {
   const prevData = prevState[keys.data];
   const updatedData = prevData
-    .filter(prevTrack => tracks.find(track => prevTrack.id !== track.id))
+    .filter(prevTrack => !!tracks.find(track => prevTrack.id !== track.id))
     .concat([...tracks]);
   const updatedStateChunk = Object.fromEntries([[keys.data, updatedData]]);
   return {
@@ -28,7 +28,7 @@ function handleUpdateTracks(prevState, { tracks }) {
 
 function handleRemoveTracks(prevState, { tracks }) {
   const prevData = prevState.get(keys.data);
-  const updatedData = prevData.filter(prevTrack => tracks.find(track => prevTrack.id !== track.id));
+  const updatedData = prevData.filter(prevTrack => !tracks.includes(prevTrack.id));
   const updatedStateChunk = Object.fromEntries([[keys.data, updatedData]]);
   return {
     ...prevState,

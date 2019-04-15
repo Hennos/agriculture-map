@@ -17,7 +17,7 @@ function handleLoadData(prevState, { data }) {
 function handleUpdateAreas(prevState, { areas }) {
   const prevData = prevState[keys.data];
   const updatedData = prevData
-    .filter(prevArea => areas.find(area => prevArea.id !== area.id))
+    .filter(prevArea => !!areas.find(area => prevArea.id !== area.id))
     .concat([...areas]);
   const updatedStateChunk = Object.fromEntries([[keys.data, updatedData]]);
   return {
@@ -28,7 +28,7 @@ function handleUpdateAreas(prevState, { areas }) {
 
 function handleRemoveAreas(prevState, { areas }) {
   const prevData = prevState[keys.data];
-  const updatedData = prevData.filter(prevArea => areas.find(area => prevArea.id !== area.id));
+  const updatedData = prevData.filter(prevArea => !areas.includes(prevArea.id));
   const updatedStateChunk = Object.fromEntries([[keys.data, updatedData]]);
   return {
     ...prevState,
