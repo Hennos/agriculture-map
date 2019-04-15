@@ -6,11 +6,10 @@ import { connect } from 'react-redux';
 
 import './index.css';
 
-import { keys } from '../../../../store/mapData/constants';
-import { setLayers, setEditableLayer } from '../../../../store/mapData/actions';
-
 import EditableLayerControl from '../EditableLayerControl';
 import MapLayersPresenter from '../MapLayersPresenter';
+
+import { mapStateToProps, mapDispatchToProps } from './mapToProps';
 
 class Map extends React.Component {
   constructor(props) {
@@ -100,16 +99,6 @@ Map.propTypes = {
 Map.defaultProps = {
   editableLayer: null
 };
-
-const mapStateToProps = state => ({
-  layers: state.mapData.get(keys.layers).toArray(),
-  editableLayer: state.mapData.get(keys.editableLayer)
-});
-
-const mapDispatchToProps = dispatch => ({
-  setMapLayers: layers => dispatch(setLayers(layers)),
-  chooseEditableLayer: layer => dispatch(setEditableLayer(layer))
-});
 
 export default connect(
   mapStateToProps,

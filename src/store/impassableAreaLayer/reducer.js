@@ -1,5 +1,3 @@
-import Immutable from 'immutable';
-
 import { keys, events } from './constants';
 import initialState from './initialState';
 
@@ -9,21 +7,33 @@ function handleLoadData(prevState, { data }) {
     type,
     coordinates
   }));
-  return prevState.set(keys.status, 'ready').set(keys.data, Immutable.List(preparedData));
+  const updatedStateChunk = Object.fromEntries([[keys.status, 'ready'], [keys.data, preparedData]]);
+  return {
+    ...prevState,
+    ...updatedStateChunk
+  };
 }
 
 function handleUpdateAreas(prevState, { areas }) {
-  const prevData = prevState.get(keys.data);
+  const prevData = prevState[keys.data];
   const updatedData = prevData
     .filter(prevArea => areas.find(area => prevArea.id !== area.id))
-    .concat(Immutable.List(areas));
-  return prevState.set(keys.data, updatedData);
+    .concat([...areas]);
+  const updatedStateChunk = Object.fromEntries([[keys.data, updatedData]]);
+  return {
+    ...prevState,
+    ...updatedStateChunk
+  };
 }
 
 function handleRemoveAreas(prevState, { areas }) {
-  const prevData = prevState.get(keys.data);
-  const updatedData = prevData.filter(prevArea => areas.find(id => prevArea.id !== id));
-  return prevState.set(keys.data, updatedData);
+  const prevData = prevState[keys.data];
+  const updatedData = prevData.filter(prevArea => areas.find(area => prevArea.id !== area.id));
+  const updatedStateChunk = Object.fromEntries([[keys.data, updatedData]]);
+  return {
+    ...prevState,
+    ...updatedStateChunk
+  };
 }
 
 const handlers = new Map([

@@ -1,5 +1,3 @@
-import Immutable from 'immutable';
-
 import { keys, events } from './constants';
 import initialState from './initialState';
 
@@ -9,21 +7,33 @@ function handleLoadData(prevState, { data }) {
     type,
     coordinates
   }));
-  return prevState.set(keys.status, 'ready').set(keys.data, Immutable.List(preparedData));
+  const updatedStateChunk = Object.fromEntries([[keys.status, 'ready'], [keys.data, preparedData]]);
+  return {
+    ...prevState,
+    ...updatedStateChunk
+  };
 }
 
 function handleUpdateTracks(prevState, { tracks }) {
-  const prevData = prevState.get(keys.data);
+  const prevData = prevState[keys.data];
   const updatedData = prevData
-    .filter(prevTrack => tracks.find(area => prevTrack.id !== area.id))
-    .concat(Immutable.List(tracks));
-  return prevState.set(keys.data, updatedData);
+    .filter(prevTrack => tracks.find(track => prevTrack.id !== track.id))
+    .concat([...tracks]);
+  const updatedStateChunk = Object.fromEntries([[keys.data, updatedData]]);
+  return {
+    ...prevState,
+    ...updatedStateChunk
+  };
 }
 
 function handleRemoveTracks(prevState, { tracks }) {
   const prevData = prevState.get(keys.data);
-  const updatedData = prevData.filter(prevTrack => tracks.find(id => prevTrack.id !== id));
-  return prevState.set(keys.data, updatedData);
+  const updatedData = prevData.filter(prevTrack => tracks.find(track => prevTrack.id !== track.id));
+  const updatedStateChunk = Object.fromEntries([[keys.data, updatedData]]);
+  return {
+    ...prevState,
+    ...updatedStateChunk
+  };
 }
 
 const handlers = new Map([

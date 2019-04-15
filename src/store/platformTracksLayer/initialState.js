@@ -1,7 +1,5 @@
-import Immutable from 'immutable';
-
 import { keys } from './constants';
 
-const initialState = Immutable.Map([[keys.status, 'loading'], [keys.data, Immutable.List()]]);
+const initialState = Object.fromEntries([[keys.status, 'loading'], [keys.data, []]]);
 
 export default initialState;

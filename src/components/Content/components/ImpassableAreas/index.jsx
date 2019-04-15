@@ -5,14 +5,9 @@ import { connect } from 'react-redux';
 import { FeatureGroup, Polygon } from 'react-leaflet';
 import { EditControl } from 'react-leaflet-draw';
 
-import { keys as layerKeys } from '../../../../store/impassableAreaLayer/constants';
-import {
-  createArea,
-  updateAreas,
-  removeAreas
-} from '../../../../store/impassableAreaLayer/actions';
-
 import MapBadge from '../MapBadge';
+
+import { mapStateToProps, mapDispatchToProps } from './mapToProps';
 
 class ImpassableAreas extends React.Component {
   onCreateArea = layer => {
@@ -83,6 +78,9 @@ class ImpassableAreas extends React.Component {
               circlemarker: false,
               marker: false
             }}
+            edit={{
+              edit: false
+            }}
           />
         )}
       </FeatureGroup>
@@ -106,22 +104,6 @@ ImpassableAreas.propTypes = {
 ImpassableAreas.defaultProps = {
   editable: false
 };
-
-const mapStateToProps = ({ impassableAreasLayer }) => ({
-  areas: impassableAreasLayer
-    .get(layerKeys.data)
-    .map(({ id, coordinates }) => ({
-      id,
-      coordinates
-    }))
-    .toArray()
-});
-
-const mapDispatchToProps = dispatch => ({
-  pushCreatedArea: area => dispatch(createArea(area)),
-  pushUpdatedAreas: areas => dispatch(updateAreas(areas)),
-  pushRemoveArea: areas => dispatch(removeAreas(areas))
-});
 
 export default connect(
   mapStateToProps,

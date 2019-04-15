@@ -44,7 +44,7 @@ EditableLayerControl.propTypes = {
 };
 
 EditableLayerControl.defaultProps = {
-  position: 'topleft',
+  position: 'topright',
   editable: '',
   onChooseEditableLayer: () => {}
 };

@@ -5,14 +5,9 @@ import { connect } from 'react-redux';
 import { FeatureGroup, Polyline } from 'react-leaflet';
 import { EditControl } from 'react-leaflet-draw';
 
-import { keys as layerKeys } from '../../../../store/platformTracksLayer/constants';
-import {
-  createTrack,
-  updateTracks,
-  removeTracks
-} from '../../../../store/platformTracksLayer/actions';
-
 import MapBadge from '../MapBadge';
+
+import { mapStateToProps, mapDispatchToProps } from './mapToProps';
 
 class PlatformTracks extends React.Component {
   onCreateTrack = layer => {
@@ -107,22 +102,6 @@ PlatformTracks.propTypes = {
 PlatformTracks.defaultProps = {
   editable: false
 };
-
-const mapStateToProps = ({ platformTracksLayer }) => ({
-  tracks: platformTracksLayer
-    .get(layerKeys.data)
-    .map(({ id, coordinates }) => ({
-      id,
-      coordinates
-    }))
-    .toArray()
-});
-
-const mapDispatchToProps = dispatch => ({
-  pushCreateTrack: track => dispatch(createTrack(track)),
-  pushUpdateTracks: tracks => dispatch(updateTracks(tracks)),
-  pushRemoveTracks: tracks => dispatch(removeTracks(tracks))
-});
 
 export default connect(
   mapStateToProps,

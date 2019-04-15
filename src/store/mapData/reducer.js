@@ -2,17 +2,25 @@ import { keys, events } from './constants';
 import initialState from './initialState';
 
 function handleSetLayer(prevState, { layer }) {
-  const prevLayers = prevState.get(keys.layers);
-  const updatedLayers = prevLayers.filter(prevLayer => prevLayer !== layer).push(layer);
-  return prevState.set(keys.layers, updatedLayers);
+  const prevLayers = prevState[keys.layers];
+  const updatedLayers = prevLayers.filter(prevLayer => prevLayer !== layer).concat(layer);
+  const updatedStateChunk = Object.fromEntries([[keys.layers, updatedLayers]]);
+  return {
+    ...prevState,
+    ...updatedStateChunk
+  };
 }
 
 function handleSetEditableLayer(prevState, { layer }) {
-  const prevLayers = prevState.get(keys.layers);
+  const prevLayers = prevState[keys.layers];
   if (!prevLayers.includes(layer)) {
     return prevState;
   }
-  return prevState.set(keys.editableLayer, layer);
+  const updatedStateChunk = Object.fromEntries([[keys.editableLayer, layer]]);
+  return {
+    ...prevState,
+    ...updatedStateChunk
+  };
 }
 
 const handlers = new Map([

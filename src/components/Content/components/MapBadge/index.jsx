@@ -18,7 +18,7 @@ MapBadge.propTypes = {
 };
 
 MapBadge.defaultProps = {
-  position: 'topleft'
+  position: 'topright'
 };
 
 export default MapBadge;
