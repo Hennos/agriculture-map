@@ -1,9 +1,9 @@
 import { keys } from './constants';
 
 const initialState = Object.fromEntries([
-  [keys.status, 'loading'],
-  [keys.editing, false],
-  [keys.data, []]
+  [keys.target, null],
+  [keys.pointsId, []],
+  [keys.points, {}]
 ]);
 
 export default initialState;

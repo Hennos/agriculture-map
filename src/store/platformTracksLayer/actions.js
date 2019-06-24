@@ -13,6 +13,11 @@ export const removeTracks = tracks => ({
   tracks
 });
 
+export const setEditing = editing => ({
+  type: events.setEditing,
+  editing
+});
+
 export const requestData = () => ({
   type: events.requestData
 });

@@ -13,6 +13,11 @@ export const removeAreas = areas => ({
   areas
 });
 
+export const setEditing = editing => ({
+  type: events.setEditing,
+  editing
+});
+
 export const requestData = () => ({
   type: events.requestData
 });

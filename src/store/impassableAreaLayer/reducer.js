@@ -1,6 +1,18 @@
 import { keys, events } from './constants';
 import initialState from './initialState';
 
+function handleSetEditing(prevState, { editing }) {
+  const prevEditing = prevState[keys.editing];
+  if (prevEditing !== editing) {
+    const updatedStateChunk = Object.fromEntries([[keys.editing, editing]]);
+    return {
+      ...prevState,
+      ...updatedStateChunk
+    };
+  }
+  return prevState;
+}
+
 function handleLoadData(prevState, { data }) {
   const preparedData = data.map(({ id, type, coordinates }) => ({
     id,
@@ -37,6 +49,7 @@ function handleRemoveAreas(prevState, { areas }) {
 }
 
 const handlers = new Map([
+  [events.setEditing, handleSetEditing],
   [events.successLoadData, handleLoadData],
   [events.updateAreas, handleUpdateAreas],
   [events.removeAreas, handleRemoveAreas]

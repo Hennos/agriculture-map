@@ -3,6 +3,8 @@ const events = Object.freeze({
   updateTracks: '@@PLATFORM_TRACKS_LAYER:UPDATE_TRACKS',
   removeTracks: '@@PLATFORM_TRACKS_LAYER:REMOVE_TRACKS',
 
+  setEditing: '@@PLATFORM_TRACKS_LAYER:SET_EDITING',
+
   requestData: '@@PLATFORM_TRACKS_LAYER:REQUEST_DATA',
   successLoadData: '@@PLATFORM_TRACKS_LAYER:SUCCESS_LOAD_DATA',
   errorLoadData: '@@PLATFORM_TRACKS_LAYER:ERROR_LOAD_DATA',
@@ -13,6 +15,7 @@ const events = Object.freeze({
 
 const keys = Object.freeze({
   status: 'status',
+  editing: 'editing',
   data: 'data'
 });
 

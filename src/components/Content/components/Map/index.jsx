@@ -8,6 +8,7 @@ import './index.css';
 
 import EditableLayerControl from '../EditableLayerControl';
 import MapLayersPresenter from '../MapLayersPresenter';
+import PointViewer from '../PointsViewer';
 
 import { mapStateToProps, mapDispatchToProps } from './mapToProps';
 
@@ -46,7 +47,8 @@ class Map extends React.Component {
     const {
       config: { width, height }
     } = this.state;
-    return new L.LatLngBounds([0, width], [-height, 0]);
+    const OFFSET = 100;
+    return new L.LatLngBounds([OFFSET, width + OFFSET], [-height - OFFSET, -OFFSET]);
   }
 
   render() {
@@ -66,7 +68,8 @@ class Map extends React.Component {
           zoomControl={false}
         >
           <TileLayer url="http://localhost:3001/tiles/{z}/{x}/{y}" />
-          {layers.length && (
+          <PointViewer />
+          {!!layers.length && (
             <EditableLayerControl
               position="topright"
               editable={editableLayer}
@@ -90,10 +93,10 @@ class Map extends React.Component {
 }
 
 Map.propTypes = {
-  editableLayer: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
   layers: PropTypes.arrayOf(PropTypes.string).isRequired,
   setMapLayers: PropTypes.func.isRequired,
-  chooseEditableLayer: PropTypes.func.isRequired
+  chooseEditableLayer: PropTypes.func.isRequired,
+  editableLayer: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])])
 };
 
 Map.defaultProps = {

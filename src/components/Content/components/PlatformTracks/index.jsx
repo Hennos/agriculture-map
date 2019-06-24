@@ -41,21 +41,58 @@ class PlatformTracks extends React.Component {
   };
 
   onRemoveTracks = layers => {
-    const { pushRemoveTracks } = this.props;
+    const { pushRemovedTracks } = this.props;
     const tracks = [];
     layers.eachLayer(layer => {
       tracks.push(layer.options.id);
     });
-    pushRemoveTracks(tracks);
+    pushRemovedTracks(tracks);
+  };
+
+  onStartCreateTrack = () => {
+    const { pushStartEditing, pushChoosedCreatedTrack } = this.props;
+    pushStartEditing();
+    pushChoosedCreatedTrack();
+  };
+
+  onAddPointToCreated = layers => {
+    const { pushAddedPoint } = this.props;
+    const layersList = layers.getLayers();
+    const { lat, lng } = layersList[layersList.length - 1].getLatLng();
+    pushAddedPoint([lat, lng]);
+  };
+
+  onStartEditingLayer = () => {
+    const { pushStartEditing } = this.props;
+    pushStartEditing();
+  };
+
+  onStopEditingLayer = () => {
+    const { pushEndEditing } = this.props;
+    pushEndEditing();
   };
 
   render() {
-    const { editable, tracks } = this.props;
+    const { editable, tracks, pushChoosedTrack, editing } = this.props;
+
+    const onEditingHandlers = {
+      onDrawStart: this.onStartCreateTrack,
+      onDrawVertex: ({ layers }) => this.onAddPointToCreated(layers),
+      onEditStart: this.onStartEditingLayer,
+      onDeleteStart: this.onStartEditingLayer,
+      onDrawStop: this.onStopEditingLayer,
+      onEditStop: this.onStopEditingLayer,
+      onDeleteStop: this.onStopEditingLayer
+    };
 
     const Tracks = () =>
-      tracks.map(({ id, coordinates }) => (
-        <Polyline key={id} id={id} color="red" positions={coordinates} />
-      ));
+      tracks.map(({ id, coordinates }) =>
+        editing ? (
+          <Polyline key={id} id={id} positions={coordinates} />
+        ) : (
+          <Polyline key={id} id={id} positions={coordinates} onClick={() => pushChoosedTrack(id)} />
+        )
+      );
 
     return (
       <FeatureGroup>
@@ -64,9 +101,6 @@ class PlatformTracks extends React.Component {
         {editable && (
           <EditControl
             position="topright"
-            onCreated={({ layer }) => this.onCreateTrack(layer)}
-            onEdited={({ layers }) => this.onEditTracks(layers)}
-            onDeleted={({ layers }) => this.onRemoveTracks(layers)}
             draw={{
               polyline: {
                 shapeOptions: {
@@ -79,6 +113,10 @@ class PlatformTracks extends React.Component {
               circlemarker: false,
               marker: false
             }}
+            onCreated={({ layer }) => this.onCreateTrack(layer)}
+            onEdited={({ layers }) => this.onEditTracks(layers)}
+            onDeleted={({ layers }) => this.onRemoveTracks(layers)}
+            {...onEditingHandlers}
           />
         )}
       </FeatureGroup>
@@ -87,15 +125,21 @@ class PlatformTracks extends React.Component {
 }
 
 const trackType = {
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   coordinates: PropTypes.array.isRequired
 };
 
 PlatformTracks.propTypes = {
+  editing: PropTypes.bool.isRequired,
   tracks: PropTypes.arrayOf(PropTypes.shape(trackType)).isRequired,
+  pushStartEditing: PropTypes.func.isRequired,
+  pushEndEditing: PropTypes.func.isRequired,
   pushCreateTrack: PropTypes.func.isRequired,
   pushUpdateTracks: PropTypes.func.isRequired,
-  pushRemoveTracks: PropTypes.func.isRequired,
+  pushRemovedTracks: PropTypes.func.isRequired,
+  pushChoosedTrack: PropTypes.func.isRequired,
+  pushChoosedCreatedTrack: PropTypes.func.isRequired,
+  pushAddedPoint: PropTypes.func.isRequired,
   editable: PropTypes.bool
 };
 

@@ -41,19 +41,67 @@ class ImpassableAreas extends React.Component {
   };
 
   onRemoveArea = layers => {
-    const { pushRemoveArea } = this.props;
+    const { pushRemovedArea } = this.props;
     const areas = [];
     layers.eachLayer(layer => {
       areas.push(layer.options.id);
     });
-    pushRemoveArea(areas);
+    pushRemovedArea(areas);
+  };
+
+  onStartCreateTrack = () => {
+    const { pushStartEditing, pushChoosedCreatedArea } = this.props;
+    pushStartEditing();
+    pushChoosedCreatedArea();
+  };
+
+  onAddPointToCreated = layers => {
+    const { pushAddedPoint } = this.props;
+    const layersList = layers.getLayers();
+    const { lat, lng } = layersList[layersList.length - 1].getLatLng();
+    pushAddedPoint([lat, lng]);
+  };
+
+  onStartEditingLayer = () => {
+    const { pushStartEditing } = this.props;
+    pushStartEditing();
+  };
+
+  onStopEditingLayer = () => {
+    const { pushEndEditing } = this.props;
+    pushEndEditing();
   };
 
   render() {
-    const { editable, areas } = this.props;
+    const { editable, areas, pushChoosedArea, editing } = this.props;
+
+    const onEditingHandlers = {
+      onCreated: ({ layer }) => this.onCreateArea(layer),
+      onEdited: ({ layers }) => this.onEditAreas(layers),
+      onDeleted: ({ layers }) => this.onRemoveArea(layers),
+      onDrawStart: this.onStartCreateTrack,
+      onDrawVertex: ({ layers }) => this.onAddPointToCreated(layers),
+      onEditStart: this.onStartEditingLayer,
+      onDeleteStart: this.onStartEditingLayer,
+      onDrawStop: this.onStopEditingLayer,
+      onEditStop: this.onStopEditingLayer,
+      onDeleteStop: this.onStopEditingLayer
+    };
 
     const Areas = () =>
-      areas.map(({ id, coordinates }) => <Polygon key={id} id={id} positions={coordinates} />);
+      areas.map(({ id, coordinates }) =>
+        editing ? (
+          <Polygon key={id} id={id} positions={coordinates} />
+        ) : (
+          <Polygon
+            key={id}
+            id={id}
+            positions={coordinates}
+            fillOpacity={0.5}
+            onClick={() => pushChoosedArea(id)}
+          />
+        )
+      );
 
     return (
       <FeatureGroup>
@@ -62,9 +110,6 @@ class ImpassableAreas extends React.Component {
         {editable && (
           <EditControl
             position="topright"
-            onCreated={({ layer }) => this.onCreateArea(layer)}
-            onEdited={({ layers }) => this.onEditAreas(layers)}
-            onDeleted={({ layers }) => this.onRemoveArea(layers)}
             draw={{
               polygon: {
                 shapeOptions: {
@@ -81,6 +126,7 @@ class ImpassableAreas extends React.Component {
             edit={{
               edit: false
             }}
+            {...onEditingHandlers}
           />
         )}
       </FeatureGroup>
@@ -89,15 +135,21 @@ class ImpassableAreas extends React.Component {
 }
 
 const areaType = {
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   coordinates: PropTypes.array.isRequired
 };
 
 ImpassableAreas.propTypes = {
+  editing: PropTypes.bool.isRequired,
   areas: PropTypes.arrayOf(PropTypes.shape(areaType)).isRequired,
+  pushStartEditing: PropTypes.func.isRequired,
+  pushEndEditing: PropTypes.func.isRequired,
   pushCreatedArea: PropTypes.func.isRequired,
   pushUpdatedAreas: PropTypes.func.isRequired,
-  pushRemoveArea: PropTypes.func.isRequired,
+  pushRemovedArea: PropTypes.func.isRequired,
+  pushChoosedArea: PropTypes.func.isRequired,
+  pushChoosedCreatedArea: PropTypes.func.isRequired,
+  pushAddedPoint: PropTypes.func.isRequired,
   editable: PropTypes.bool
 };
 
