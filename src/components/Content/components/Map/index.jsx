@@ -6,9 +6,12 @@ import { connect } from 'react-redux';
 
 import './index.css';
 
-import EditableLayerControl from '../EditableLayerControl';
-import MapLayersPresenter from '../MapLayersPresenter';
-import PointViewer from '../PointsViewer';
+// import EditableLayerControl from '../EditableLayerControl';
+// import MapLayersPresenter from '../MapLayersPresenter';
+// import PointViewer from '../PointsViewer';
+// import StaticDataLoader from '../StaticDataLoader';
+import CompositeLayer from '../CompositeLayer';
+import WithGeodataRealtimeService from '../WithGeodataRealtimeService';
 
 import { mapStateToProps, mapDispatchToProps } from './mapToProps';
 
@@ -55,7 +58,8 @@ class Map extends React.Component {
     const { layers, editableLayer, chooseEditableLayer } = this.props;
     const { loaded, config } = this.state;
     return (
-      loaded && (
+      loaded &&
+      WithGeodataRealtimeService(
         <LeafletMap
           id="root-map"
           crs={L.CRS.Simple}
@@ -68,7 +72,13 @@ class Map extends React.Component {
           zoomControl={false}
         >
           <TileLayer url="http://localhost:3001/tiles/{z}/{x}/{y}" />
-          <PointViewer />
+          <FeatureGroup>
+            {/* {layers.map(layer => (
+              <DataLayerRender key={layer} layer={layer} />
+            ))} */}
+            <CompositeLayer name={0} />
+          </FeatureGroup>
+          {/* <PointViewer />
           {!!layers.length && (
             <EditableLayerControl
               position="topright"
@@ -85,7 +95,7 @@ class Map extends React.Component {
                 editable={layer === editableLayer}
               />
             ))}
-          </FeatureGroup>
+          </FeatureGroup> */}
         </LeafletMap>
       )
     );
