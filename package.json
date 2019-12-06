@@ -4,6 +4,7 @@
   "private": false,
   "dependencies": {
     "classnames": "^2.2.6",
+    "hash-sum": "^2.0.0",
     "leaflet": "^1.4.0",
     "leaflet-draw": "^1.0.4",
     "lodash": "^4.17.15",

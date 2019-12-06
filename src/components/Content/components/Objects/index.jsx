@@ -1,20 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import { Polyline } from 'react-leaflet';
+import L from 'leaflet';
+import { GeoJSON } from 'react-leaflet';
+import hash from 'hash-sum';
 
 import types from './types';
 
-const Objects = ({ layer, objects }) =>
-  objects.map(({ geometry }) => <Polyline key={0} positions={geometry.coordinates} />);
+const Objects = ({ collection }) => (
+  <GeoJSON
+    key={hash(collection)}
+    pointToLayer={(feature, latlng) =>
+      L.circleMarker(latlng, {
+        color: 'red',
+        key: 0,
+        radius: 5,
+        fillColor: 'blue',
+        fillOpacity: 1.0
+      })
+    }
+    data={collection}
+  />
+);
 
 Objects.propTypes = {
   layer: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  objects: PropTypes.arrayOf(PropTypes.shape(types.objectData))
+  collection: PropTypes.arrayOf(PropTypes.shape(types.objectData))
 };
 
 Objects.defaultProps = {
-  objects: []
+  collection: []
 };
 
 export default Objects;

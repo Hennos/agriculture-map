@@ -7,9 +7,13 @@ const StaticDataLoader = ({ url, children }) => {
   useEffect(() => {
     fetch(url)
       .then(response => {
-        response.json().then(loaded => {
-          setData(loaded);
-        });
+        if (response.status !== 404) {
+          response.json().then(loaded => {
+            setData(loaded);
+          });
+        } else {
+          setData(null);
+        }
       })
       .catch(err => {
         throw err;

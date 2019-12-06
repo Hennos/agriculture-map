@@ -4,19 +4,26 @@ import io from 'socket.io-client';
 
 import WebSocketContext from '../../../../ws-context';
 
-const WithWebSocketConnection = ({ service, children }) => {
-  const [connection, setConnection] = useState(null);
+const WithWebSocketConnection = ({ services, children }) => {
+  const [connections, setConnections] = useState(null);
 
   useEffect(() => {
-    const socket = io(service);
-    setConnection(socket);
+    setConnections(
+      Object.fromEntries(
+        Object.entries(services).map(([serviceName, serviceRoot]) => [serviceName, io(serviceRoot)])
+      )
+    );
   }, []);
 
-  return <WebSocketContext.Provider value={connection}>{children}</WebSocketContext.Provider>;
+  return (
+    connections && (
+      <WebSocketContext.Provider value={connections}>{children}</WebSocketContext.Provider>
+    )
+  );
 };
 
 WithWebSocketConnection.propTypes = {
-  service: PropTypes.string.isRequired,
+  services: PropTypes.objectOf(PropTypes.string).isRequired,
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.arrayOf(PropTypes.element)])
     .isRequired
 };

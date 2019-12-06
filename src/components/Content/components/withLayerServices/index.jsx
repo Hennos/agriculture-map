@@ -2,12 +2,16 @@ import React from 'react';
 
 import LayerService from '../LayerService';
 
-const withLayerServices = services => Layer =>
-  Array.of(services).reduce(
-    (component, { name: serviceName, options: serviceOptions }) => (
-      <LayerService name={serviceName} options={serviceOptions} component={component} />
+const WithLayerServices = (services, component) => {
+  const RenderedLayer = services.reduce(
+    (fabricate, { service: serviceName, options: serviceOptions }) => props => (
+      <LayerService name={serviceName} options={serviceOptions}>
+        {serviceData => fabricate({ ...props, ...serviceData })}
+      </LayerService>
     ),
-    props => <Layer {...props} />
+    component
   );
+  return <RenderedLayer />;
+};
 
-export default withLayerServices;
+export default WithLayerServices;

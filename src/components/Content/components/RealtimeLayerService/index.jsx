@@ -4,19 +4,30 @@ import PropTypes from 'prop-types';
 import WebSocketContext from '../../../../ws-context';
 import RealtimeDataLoader from '../RealtimeDataLoader';
 
-const RealtimeLayerService = ({ component, options }) => (
+import types from './types';
+
+const RealtimeLayerService = ({ options, children }) => (
   <WebSocketContext.Consumer>
-    {socket => (
-      <RealtimeDataLoader socket={socket} options={options}>
-        {({ objects }) => props => component({ objects, ...props })}
+    {channels => (
+      <RealtimeDataLoader
+        socket={channels.geodata}
+        options={{
+          request: 'ws_ask_layer_objects',
+          response: 'ws_send_layer_objects',
+          layer: options.layer,
+          repeat: true,
+          delay: options.delay
+        }}
+      >
+        {({ objects }) => children({ collection: objects })}
       </RealtimeDataLoader>
     )}
   </WebSocketContext.Consumer>
 );
 
 RealtimeLayerService.propTypes = {
-  options: PropTypes.shape({}).isRequired,
-  component: PropTypes.func.isRequired
+  options: PropTypes.shape(types.options).isRequired,
+  children: PropTypes.func.isRequired
 };
 
 export default RealtimeLayerService;

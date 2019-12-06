@@ -1,119 +1,78 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect } from 'react';
 import L from 'leaflet';
-import { Map as LeafletMap, TileLayer, FeatureGroup } from 'react-leaflet';
-import { connect } from 'react-redux';
+import { Map as LeafletMap, WMSTileLayer, FeatureGroup } from 'react-leaflet';
 
 import './index.css';
 
-// import EditableLayerControl from '../EditableLayerControl';
-// import MapLayersPresenter from '../MapLayersPresenter';
-// import PointViewer from '../PointsViewer';
-// import StaticDataLoader from '../StaticDataLoader';
+import settings from '../../../../settings';
+
 import CompositeLayer from '../CompositeLayer';
-import WithGeodataRealtimeService from '../WithGeodataRealtimeService';
+import WithWebSocketConnection from '../WithWebSocketConnection';
+import FlightTasksPanel from '../FlightTasksPanel';
 
-import { mapStateToProps, mapDispatchToProps } from './mapToProps';
+const Map = () => {
+  const [loaded, setLoaded] = useState(false);
+  const [options, setOptions] = useState(null);
+  const [services, setServices] = useState(null);
+  const [layers, setLayers] = useState(null);
 
-class Map extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      loaded: false,
-      config: null
-    };
-  }
-
-  componentDidMount() {
-    const { setMapLayers } = this.props;
-    fetch('http://localhost:3001/config')
-      .then(response => {
-        response.json().then(({ mapWidth, mapHeight, maxZoom, layers }) => {
-          setMapLayers(layers);
-          this.setState({
-            loaded: true,
-            config: {
-              width: mapWidth,
-              height: mapHeight,
-              maxZoom
-            }
-          });
+  useEffect(() => {
+    const requestMapConfig = configUrl => fetch(configUrl).then(response => response.json());
+    const requestServices = servicesUrl => fetch(servicesUrl).then(response => response.json());
+    const requestLayersList = layersUrl => fetch(layersUrl).then(response => response.json());
+    requestMapConfig(settings.urls.config)
+      .then(({ origin: [xO, yO], bbox: [luBbox, rbBbox], wms }) => {
+        setOptions({
+          origin: new L.LatLng(xO, yO),
+          bbox: new L.LatLngBounds(luBbox, rbBbox),
+          wms
         });
       })
+      .then(() => requestServices(settings.urls.services))
+      .then(servicesMap => {
+        if (servicesMap) {
+          setServices(servicesMap);
+          return servicesMap;
+        }
+        throw new Error('Get invalid services list');
+      })
+      .then(({ layers: layerService }) => requestLayersList(layerService))
+      .then(({ layers: layersList }) => {
+        if (layersList) {
+          setLayers(layersList);
+        } else {
+          throw new Error('Get invalid layers array');
+        }
+      })
+      .then(() => setLoaded(true))
       .catch(err => {
-        throw err;
+        console.error(err);
       });
-  }
+  }, []);
 
-  getMaxBounds() {
-    const {
-      config: { width, height }
-    } = this.state;
-    const OFFSET = 100;
-    return new L.LatLngBounds([OFFSET, width + OFFSET], [-height - OFFSET, -OFFSET]);
-  }
-
-  render() {
-    const { layers, editableLayer, chooseEditableLayer } = this.props;
-    const { loaded, config } = this.state;
-    return (
-      loaded &&
-      WithGeodataRealtimeService(
+  return (
+    loaded && (
+      <WithWebSocketConnection services={services.realtime}>
         <LeafletMap
           id="root-map"
-          crs={L.CRS.Simple}
-          maxBounds={this.getMaxBounds()}
-          center={[0, 0]}
+          bounds={options.bbox}
+          maxBounds={options.bbox}
+          center={options.origin}
           zoom={0}
-          minZoom={0}
-          maxZoom={config.maxZoom}
-          maxBoundsViscosity={1.0}
           zoomControl={false}
+          crs={L.CRS.EPSG3857}
         >
-          <TileLayer url="http://localhost:3001/tiles/{z}/{x}/{y}" />
-          <FeatureGroup>
-            {/* {layers.map(layer => (
-              <DataLayerRender key={layer} layer={layer} />
-            ))} */}
-            <CompositeLayer name={0} />
-          </FeatureGroup>
-          {/* <PointViewer />
-          {!!layers.length && (
-            <EditableLayerControl
-              position="topright"
-              editable={editableLayer}
-              layers={layers}
-              onChooseEditableLayer={chooseEditableLayer}
-            />
-          )}
+          <WMSTileLayer {...options.wms} crs={L.CRS.EPSG3857} />
           <FeatureGroup>
             {layers.map(layer => (
-              <MapLayersPresenter
-                key={layer}
-                presented={layer}
-                editable={layer === editableLayer}
-              />
+              <CompositeLayer key={layer} name={layer} />
             ))}
-          </FeatureGroup> */}
+          </FeatureGroup>
+          <FlightTasksPanel position="topleft" />
         </LeafletMap>
-      )
-    );
-  }
-}
-
-Map.propTypes = {
-  layers: PropTypes.arrayOf(PropTypes.string).isRequired,
-  setMapLayers: PropTypes.func.isRequired,
-  chooseEditableLayer: PropTypes.func.isRequired,
-  editableLayer: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])])
+      </WithWebSocketConnection>
+    )
+  );
 };
 
-Map.defaultProps = {
-  editableLayer: null
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Map);
+export default Map;

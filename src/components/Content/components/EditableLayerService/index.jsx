@@ -1,11 +1,32 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import L from 'leaflet';
 
 import { FeatureGroup } from 'react-leaflet';
 import { EditControl } from 'react-leaflet-draw';
 
+import { setLocalisationDraw } from './helpers';
+
 import { createObject, changeObjects, removeObjects } from '../../../../store/edit/actions';
+
+// const RealtimeLayerService = ({ options, children }) => (
+//   <WebSocketContext.Consumer>
+//     {channels => (
+//       <RealtimeDataLoader
+//         socket={channels.geodata}
+//         options={{
+//           request: 'ws_ask_layer_objects',
+//           response: 'ws_send_layer_objects',
+//           delay: options.delay,
+//           layer: options.layer
+//         }}
+//       >
+//         {({ objects }) => children({ objects })}
+//       </RealtimeDataLoader>
+//     )}
+//   </WebSocketContext.Consumer>
+// );
 
 const EditableLayerService = ({
   options: { draw, edit },
@@ -14,11 +35,16 @@ const EditableLayerService = ({
   pushChangedObjects,
   pushRemovedObjects
 }) => {
+  useEffect(() => {
+    setLocalisationDraw(L.drawLocal);
+  }, []);
+
   function onCreateObject(layer) {
+    console.log(JSON.stringify(layer.toGeoJSON()));
     pushCreatedObject({
       json: layer.toGeoJSON()
     });
-    layer.remove();
+    // layer.remove();
   }
 
   function onEditObjects(layers) {
@@ -50,7 +76,7 @@ const EditableLayerService = ({
         onEdited={({ layers }) => onEditObjects(layers)}
         onDeleted={({ layers }) => onRemoveObjects(layers)}
       />
-      {children}
+      {children()}
     </FeatureGroup>
   );
 };
@@ -62,17 +88,16 @@ const optionsType = {
 
 EditableLayerService.propTypes = {
   options: PropTypes.shape(optionsType).isRequired,
-  children: PropTypes.oneOfType(PropTypes.arrayOf(PropTypes.element), PropTypes.element.isRequired)
-    .isRequired,
+  children: PropTypes.func.isRequired,
   pushCreatedObject: PropTypes.func.isRequired,
   pushChangedObjects: PropTypes.func.isRequired,
   pushRemovedObjects: PropTypes.func.isRequired
 };
 
 const mapDispatchToProps = dispatch => ({
-  pushCreatedObject: object => dispatch(createObject(object)),
-  pushChangedObjects: objects => dispatch(changeObjects(objects)),
-  pushRemovedObjects: objects => dispatch(removeObjects(objects))
+  pushCreatedObject: object => {},
+  pushChangedObjects: objects => {},
+  pushRemovedObjects: objects => {}
 });
 
 export default connect(

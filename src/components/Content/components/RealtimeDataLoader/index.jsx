@@ -1,20 +1,28 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
+import types from './types';
+
 const RealtimeDataLoader = ({ socket, options, children }) => {
   const [data, setData] = useState(null);
 
+  const { request, response, layer, repeat = false, delay = 100 } = options;
   useEffect(() => {
-    const loading = setInterval(() => {
-      socket.emit(options.request, options.layerId);
-    }, options.delay);
+    let loader = setTimeout(function run() {
+      socket.emit(request, layer);
+      if (repeat) {
+        loader = setTimeout(run, delay);
+      }
+    }, 0);
 
-    socket.on(options.response, loaded => {
-      setData(loaded);
+    socket.on(response, ({ id, ...loaded }) => {
+      if (id === options.layer) {
+        setData(loaded);
+      }
     });
 
     return function cleanup() {
-      clearInterval(loading);
+      clearTimeout(loader);
     };
   }, []);
 
@@ -24,19 +32,14 @@ const RealtimeDataLoader = ({ socket, options, children }) => {
 };
 
 RealtimeDataLoader.propTypes = {
-  socket: PropTypes.shape({
-    on: PropTypes.func.isRequired,
-    emit: PropTypes.func.isRequired
-  }).isRequired,
-  options: PropTypes.shape({
-    delay: PropTypes.number
-  }),
+  socket: PropTypes.shape(types.socket).isRequired,
+  options: PropTypes.shape(types.options),
   children: PropTypes.func.isRequired
 };
 
 RealtimeDataLoader.defaultProps = {
   options: {
-    delay: 100
+    repeat: false
   }
 };
 

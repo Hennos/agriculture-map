@@ -11,15 +11,15 @@ const services = new Map([
   ['editable', EditableLayerService]
 ]);
 
-const LayerService = ({ name, options, component }) => {
-  const Service = services(name);
-  return <Service options={options} component={component} />;
+const LayerService = ({ name, options, children }) => {
+  const Service = services.get(name);
+  return <Service options={options}>{children}</Service>;
 };
 
 LayerService.propTypes = {
   name: PropTypes.string.isRequired,
   options: PropTypes.shape({}).isRequired,
-  component: PropTypes.func.isRequired
+  children: PropTypes.func.isRequired
 };
 
 export default LayerService;
