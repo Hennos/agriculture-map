@@ -29,6 +29,7 @@ import { createObject, changeObjects, removeObjects } from '../../../../store/ed
 // );
 
 const EditableLayerService = ({
+  layer,
   options: { draw, edit },
   children,
   pushCreatedObject,
@@ -87,6 +88,7 @@ const optionsType = {
 };
 
 EditableLayerService.propTypes = {
+  layer: PropTypes.string.isRequired,
   options: PropTypes.shape(optionsType).isRequired,
   children: PropTypes.func.isRequired,
   pushCreatedObject: PropTypes.func.isRequired,

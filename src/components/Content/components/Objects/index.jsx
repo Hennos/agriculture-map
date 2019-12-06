@@ -4,8 +4,6 @@ import L from 'leaflet';
 import { GeoJSON } from 'react-leaflet';
 import hash from 'hash-sum';
 
-import types from './types';
-
 const Objects = ({ collection }) => (
   <GeoJSON
     key={hash(collection)}
@@ -23,8 +21,7 @@ const Objects = ({ collection }) => (
 );
 
 Objects.propTypes = {
-  layer: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  collection: PropTypes.arrayOf(PropTypes.shape(types.objectData))
+  collection: PropTypes.arrayOf(PropTypes.object)
 };
 
 Objects.defaultProps = {

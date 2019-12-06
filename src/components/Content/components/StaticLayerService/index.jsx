@@ -4,15 +4,15 @@ import PropTypes from 'prop-types';
 import WebSocketContext from '../../../../ws-context';
 import RealtimeDataLoader from '../RealtimeDataLoader';
 
-const StaticLayerService = ({ options, children }) => (
+const StaticLayerService = ({ layer, options, children }) => (
   <WebSocketContext.Consumer>
     {channels => (
       <RealtimeDataLoader
         socket={channels.geodata}
         options={{
+          layer,
           request: 'ws_ask_layer_objects',
-          response: 'ws_send_layer_objects',
-          layer: options.layer
+          response: 'ws_send_layer_objects'
         }}
       >
         {({ objects }) => children({ collection: objects })}
@@ -22,6 +22,7 @@ const StaticLayerService = ({ options, children }) => (
 );
 
 StaticLayerService.propTypes = {
+  layer: PropTypes.string.isRequired,
   options: PropTypes.shape({}).isRequired,
   children: PropTypes.func.isRequired
 };
