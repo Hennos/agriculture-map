@@ -7,20 +7,24 @@ import Objects from '../Objects';
 import WithLayerServices from '../WithLayerServices';
 import WithLayerScheme from '../WithLayerScheme';
 
-const CompositeLayer = ({ name, scheme: { options = {}, childLayers = [] } }) => (
-  <FeatureGroup>
-    {childLayers.map(childLayer => (
-      <CompositeLayer key={childLayer} name={childLayer} />
-    ))}
-    {WithLayerServices(options.services, props => (
-      <Objects layer={name} {...props} />
-    ))}
-  </FeatureGroup>
-);
+import types from './types';
+
+const CompositeLayer = WithLayerScheme(({ name, scheme }) => {
+  const { options, childLayers, services, objects } = scheme;
+  return (
+    <FeatureGroup>
+      {childLayers.map(childLayer => (
+        <CompositeLayer key={childLayer} name={childLayer} />
+      ))}
+      {WithLayerServices(name, services, props => (
+        <Objects {...props} />
+      ))}
+    </FeatureGroup>
+  );
+});
 
 CompositeLayer.propTypes = {
-  name: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  scheme: PropTypes.shape({}).isRequired
+  name: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
 };
 
-export default WithLayerScheme(CompositeLayer);
+export default CompositeLayer;
