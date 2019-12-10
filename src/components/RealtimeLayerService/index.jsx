@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import WebSocketContext from '../../../../ws-context';
+import WebSocketContext from '../../ws-context';
 import RealtimeDataLoader from '../RealtimeDataLoader';
 
-const StaticLayerService = ({ layer, options, children }) => (
+import types from './types';
+
+const RealtimeLayerService = ({ layer, options, children }) => (
   <WebSocketContext.Consumer>
     {channels => (
       <RealtimeDataLoader
@@ -12,7 +14,9 @@ const StaticLayerService = ({ layer, options, children }) => (
         options={{
           layer,
           request: 'ws_ask_layer_objects',
-          response: 'ws_send_layer_objects'
+          response: 'ws_send_layer_objects',
+          repeat: true,
+          delay: options.delay
         }}
       >
         {({ objects }) => children({ collection: objects })}
@@ -21,10 +25,10 @@ const StaticLayerService = ({ layer, options, children }) => (
   </WebSocketContext.Consumer>
 );
 
-StaticLayerService.propTypes = {
+RealtimeLayerService.propTypes = {
   layer: PropTypes.string.isRequired,
-  options: PropTypes.shape({}).isRequired,
+  options: PropTypes.shape(types.options).isRequired,
   children: PropTypes.func.isRequired
 };
 
-export default StaticLayerService;
+export default RealtimeLayerService;

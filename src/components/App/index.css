@@ -17,6 +17,11 @@
   border-bottom: 1px solid black;
 }
 
+.map-application > .map-application-content {
+  position: relative;
+  display: grid;
+}
+
 .map-application html,
 body,
 div,

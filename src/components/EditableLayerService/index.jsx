@@ -8,25 +8,7 @@ import { EditControl } from 'react-leaflet-draw';
 
 import { setLocalisationDraw } from './helpers';
 
-import { createObject, changeObjects, removeObjects } from '../../../../store/edit/actions';
-
-// const RealtimeLayerService = ({ options, children }) => (
-//   <WebSocketContext.Consumer>
-//     {channels => (
-//       <RealtimeDataLoader
-//         socket={channels.geodata}
-//         options={{
-//           request: 'ws_ask_layer_objects',
-//           response: 'ws_send_layer_objects',
-//           delay: options.delay,
-//           layer: options.layer
-//         }}
-//       >
-//         {({ objects }) => children({ objects })}
-//       </RealtimeDataLoader>
-//     )}
-//   </WebSocketContext.Consumer>
-// );
+import { createObject, changeObjects, removeObjects } from '../../store/edit/actions';
 
 const EditableLayerService = ({
   layer,
@@ -40,29 +22,29 @@ const EditableLayerService = ({
     setLocalisationDraw(L.drawLocal);
   }, []);
 
-  function onCreateObject(layer) {
-    console.log(JSON.stringify(layer.toGeoJSON()));
+  function onCreateObject(createdLayer) {
+    console.log(JSON.stringify(createdLayer.toGeoJSON()));
     pushCreatedObject({
-      json: layer.toGeoJSON()
+      json: createdLayer.toGeoJSON()
     });
     // layer.remove();
   }
 
-  function onEditObjects(layers) {
+  function onEditObjects(editedLayers) {
     const objects = [];
-    layers.eachLayer(layer => {
+    editedLayers.eachLayer(editedLayer => {
       objects.push({
-        id: layer.options.id,
-        json: layer.toGeoJSON()
+        id: editedLayer.options.id,
+        json: editedLayer.toGeoJSON()
       });
     });
     pushChangedObjects(objects);
   }
 
-  function onRemoveObjects(layers) {
+  function onRemoveObjects(removedLayers) {
     const objects = [];
-    layers.eachLayer(layer => {
-      objects.push(layer.options.id);
+    removedLayers.eachLayer(removedLayer => {
+      objects.push(removedLayer.options.id);
     });
     pushRemovedObjects(objects);
   }
@@ -73,9 +55,9 @@ const EditableLayerService = ({
         position="topright"
         draw={{ ...draw }}
         edit={{ ...edit }}
-        onCreated={({ layer }) => onCreateObject(layer)}
-        onEdited={({ layers }) => onEditObjects(layers)}
-        onDeleted={({ layers }) => onRemoveObjects(layers)}
+        onCreated={({ layer: createdLayer }) => onCreateObject(createdLayer)}
+        onEdited={({ layers: editedLayers }) => onEditObjects(editedLayers)}
+        onDeleted={({ layers: removedLayers }) => onRemoveObjects(removedLayers)}
       />
       {children()}
     </FeatureGroup>
