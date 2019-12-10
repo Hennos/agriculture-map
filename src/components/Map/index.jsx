@@ -4,7 +4,7 @@ import { Map as LeafletMap, WMSTileLayer, FeatureGroup } from 'react-leaflet';
 
 import './index.css';
 
-import settings from '../../../../settings';
+import settings from '../../settings';
 
 import CompositeLayer from '../CompositeLayer';
 import WithWebSocketConnection from '../WithWebSocketConnection';

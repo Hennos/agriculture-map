@@ -2,11 +2,15 @@ import React from 'react';
 
 import './index.css';
 
-import Content from '../Content';
+import Map from '../Map';
 
 const App = () => (
   <div className="map-application">
-    <Content stylization="map-application-content map-application-fragment" />
+    <div className="map-application-content map-application-fragment">
+      <div className="content-container">
+        <Map />
+      </div>
+    </div>
   </div>
 );
 

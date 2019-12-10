@@ -7,8 +7,6 @@ import Objects from '../Objects';
 import WithLayerServices from '../WithLayerServices';
 import WithLayerScheme from '../WithLayerScheme';
 
-import types from './types';
-
 const CompositeLayer = WithLayerScheme(({ name, scheme }) => {
   const { options, childLayers, services, objects } = scheme;
   return (

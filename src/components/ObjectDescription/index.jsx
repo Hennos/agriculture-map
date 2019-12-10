@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-import { urls } from '../../../../store/geoCatalog/constants';
+const urls = {
+  catalog: ''
+};
 
 const ObjectDescription = ({ id, useViewer }) => {
   const [desctiption, setDescription] = useState(null);
