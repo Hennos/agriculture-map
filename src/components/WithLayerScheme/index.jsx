@@ -5,7 +5,7 @@ import StaticDataLoader from '../StaticDataLoader';
 
 const WithLayerScheme = Component =>
   WithMapServices(({ name, services, ...props }) => (
-    <StaticDataLoader url={`${services.layers}/schemes/${name}`}>
+    <StaticDataLoader url={`${services.static.layersSchemes}/${name}`}>
       {scheme => <Component name={name} scheme={scheme} {...props} />}
     </StaticDataLoader>
   ));

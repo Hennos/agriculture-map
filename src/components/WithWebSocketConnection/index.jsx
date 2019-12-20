@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import io from 'socket.io-client';
 
+import WithMapServices from '../WithMapServices';
 import WebSocketContext from '../../ws-context';
 
 const WithWebSocketConnection = ({ services, children }) => {
@@ -10,7 +11,10 @@ const WithWebSocketConnection = ({ services, children }) => {
   useEffect(() => {
     setConnections(
       Object.fromEntries(
-        Object.entries(services).map(([serviceName, serviceRoot]) => [serviceName, io(serviceRoot)])
+        Object.entries(services.realtime).map(([serviceName, serviceRoot]) => [
+          serviceName,
+          io(serviceRoot)
+        ])
       )
     );
   }, []);
@@ -23,9 +27,9 @@ const WithWebSocketConnection = ({ services, children }) => {
 };
 
 WithWebSocketConnection.propTypes = {
-  services: PropTypes.objectOf(PropTypes.string).isRequired,
+  services: PropTypes.objectOf(PropTypes.objectOf(PropTypes.string)).isRequired,
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.arrayOf(PropTypes.element)])
     .isRequired
 };
 
-export default WithWebSocketConnection;
+export default WithMapServices(WithWebSocketConnection);

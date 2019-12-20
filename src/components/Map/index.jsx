@@ -11,48 +11,27 @@ import WithWebSocketConnection from '../WithWebSocketConnection';
 import FlightTasksPanel from '../FlightTasksPanel';
 
 const Map = () => {
-  const [loaded, setLoaded] = useState(false);
   const [options, setOptions] = useState(null);
-  const [services, setServices] = useState(null);
-  const [layers, setLayers] = useState(null);
 
   useEffect(() => {
     const requestMapConfig = configUrl => fetch(configUrl).then(response => response.json());
-    const requestServices = servicesUrl => fetch(servicesUrl).then(response => response.json());
-    const requestLayersList = layersUrl => fetch(layersUrl).then(response => response.json());
     requestMapConfig(settings.urls.config)
-      .then(({ origin: [xO, yO], bbox: [luBbox, rbBbox], wms }) => {
+      .then(({ origin: [xO, yO], bbox: [luBbox, rbBbox], wms, layers }) => {
         setOptions({
           origin: new L.LatLng(xO, yO),
           bbox: new L.LatLngBounds(luBbox, rbBbox),
-          wms
+          wms,
+          layers
         });
       })
-      .then(() => requestServices(settings.urls.services))
-      .then(servicesMap => {
-        if (servicesMap) {
-          setServices(servicesMap);
-          return servicesMap;
-        }
-        throw new Error('Get invalid services list');
-      })
-      .then(({ layers: layerService }) => requestLayersList(layerService))
-      .then(({ layers: layersList }) => {
-        if (layersList) {
-          setLayers(layersList);
-        } else {
-          throw new Error('Get invalid layers array');
-        }
-      })
-      .then(() => setLoaded(true))
       .catch(err => {
-        console.error(err);
+        throw err;
       });
   }, []);
 
   return (
-    loaded && (
-      <WithWebSocketConnection services={services.realtime}>
+    options && (
+      <WithWebSocketConnection>
         <LeafletMap
           id="root-map"
           bounds={options.bbox}
@@ -64,7 +43,7 @@ const Map = () => {
         >
           <WMSTileLayer {...options.wms} crs={L.CRS.EPSG3857} />
           <FeatureGroup>
-            {layers.map(layer => (
+            {options.layers.map(layer => (
               <CompositeLayer key={layer} name={layer} />
             ))}
           </FeatureGroup>

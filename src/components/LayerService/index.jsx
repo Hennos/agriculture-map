@@ -11,17 +11,17 @@ const services = new Map([
   ['editable', EditableLayerService]
 ]);
 
-const LayerService = ({ layer, name, options, children }) => {
+const LayerService = ({ name, options, layerScheme, children }) => {
   const Service = services.get(name);
   return (
-    <Service layer={layer} options={options}>
+    <Service layerScheme={layerScheme} options={options}>
       {children}
     </Service>
   );
 };
 
 LayerService.propTypes = {
-  layer: PropTypes.string.isRequired,
+  layerScheme: PropTypes.shape({}).isRequired,
   name: PropTypes.string.isRequired,
   options: PropTypes.shape({}).isRequired,
   children: PropTypes.func.isRequired

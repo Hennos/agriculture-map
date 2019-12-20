@@ -7,14 +7,14 @@ import Objects from '../Objects';
 import WithLayerServices from '../WithLayerServices';
 import WithLayerScheme from '../WithLayerScheme';
 
-const CompositeLayer = WithLayerScheme(({ name, scheme }) => {
-  const { options, childLayers, services, objects } = scheme;
+const CompositeLayer = WithLayerScheme(({ scheme }) => {
+  const { options, childLayers, services, ...layerScheme } = scheme;
   return (
     <FeatureGroup>
       {childLayers.map(childLayer => (
         <CompositeLayer key={childLayer} name={childLayer} />
       ))}
-      {WithLayerServices(name, services, props => (
+      {WithLayerServices(services, layerScheme, props => (
         <Objects {...props} />
       ))}
     </FeatureGroup>

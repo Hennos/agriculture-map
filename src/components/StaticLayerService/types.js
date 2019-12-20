@@ -11,8 +11,5 @@ export default Object.freeze({
         })
       ).isRequired
     }).isRequired
-  },
-  options: {
-    delay: PropTypes.number
   }
 });
