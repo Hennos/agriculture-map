@@ -2,10 +2,10 @@ import React from 'react';
 
 import LayerService from '../LayerService';
 
-const WithLayerServices = (layer, services, component) => {
+const WithLayerServices = (services, scheme, component) => {
   const RenderedLayer = services.reduce(
     (fabricate, { service: serviceName, options: serviceOptions }) => props => (
-      <LayerService layer={layer} name={serviceName} options={serviceOptions}>
+      <LayerService name={serviceName} options={serviceOptions} layerScheme={scheme}>
         {serviceData => fabricate({ ...props, ...serviceData })}
       </LayerService>
     ),
