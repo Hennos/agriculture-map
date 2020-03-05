@@ -7,9 +7,16 @@ import RealtimeDataLoader from '../RealtimeDataLoader';
 import types from './types';
 
 const StaticLayerService = ({ layerScheme, children }) => {
-  const {
-    objects: { endpoint }
-  } = layerScheme;
+  const { objects } = layerScheme;
+
+  const { endpoint } = objects;
+  const schemeOptions = objects.types
+    ? {
+        types: objects.types
+      }
+    : {
+        format: objects.format
+      };
   return (
     <WebSocketContext.Consumer>
       {channels => (
@@ -21,7 +28,7 @@ const StaticLayerService = ({ layerScheme, children }) => {
             response: 'ws_send_layer_objects'
           }}
         >
-          {({ objects }) => children({ collection: objects })}
+          {data => children({ collection: data.objects, ...schemeOptions })}
         </RealtimeDataLoader>
       )}
     </WebSocketContext.Consumer>

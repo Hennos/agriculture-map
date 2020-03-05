@@ -7,9 +7,17 @@ import RealtimeDataLoader from '../RealtimeDataLoader';
 import propTypes from './types';
 
 const RealtimeLayerService = ({ layerScheme, options, children }) => {
-  const {
-    objects: { endpoint, types: regTypes }
-  } = layerScheme;
+  const { objects } = layerScheme;
+
+  const { endpoint } = objects;
+  const schemeOptions = objects.types
+    ? {
+        types: objects.types
+      }
+    : {
+        format: objects.format
+      };
+
   return (
     <WebSocketContext.Consumer>
       {channels => (
@@ -23,10 +31,10 @@ const RealtimeLayerService = ({ layerScheme, options, children }) => {
             delay: options.delay
           }}
         >
-          {({ objects }) =>
+          {data =>
             children({
-              collection: objects,
-              types: regTypes
+              collection: data.objects,
+              ...schemeOptions
             })
           }
         </RealtimeDataLoader>
