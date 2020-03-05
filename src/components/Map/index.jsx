@@ -1,56 +1,48 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { useQuery } from '@apollo/react-hooks';
 import L from 'leaflet';
 import { Map as LeafletMap, WMSTileLayer, FeatureGroup } from 'react-leaflet';
 
-import './index.css';
+import { GET_MAP_OPTIONS } from './query';
 
-import settings from '../../settings';
+import './index.css';
 
 import CompositeLayer from '../CompositeLayer';
 import WithWebSocketConnection from '../WithWebSocketConnection';
 import FlightTasksPanel from '../FlightTasksPanel';
 
 const Map = () => {
-  const [options, setOptions] = useState(null);
+  const { loading, error, data } = useQuery(GET_MAP_OPTIONS);
 
-  useEffect(() => {
-    const requestMapConfig = configUrl => fetch(configUrl).then(response => response.json());
-    requestMapConfig(settings.urls.config)
-      .then(({ origin: [xO, yO], bbox: [luBbox, rbBbox], wms, layers }) => {
-        setOptions({
-          origin: new L.LatLng(xO, yO),
-          bbox: new L.LatLngBounds(luBbox, rbBbox),
-          wms,
-          layers
-        });
-      })
-      .catch(err => {
-        throw err;
-      });
-  }, []);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error</p>;
 
+  const { position, substrate } = data;
   return (
-    options && (
-      <WithWebSocketConnection>
-        <LeafletMap
-          id="root-map"
-          bounds={options.bbox}
-          maxBounds={options.bbox}
-          center={options.origin}
-          zoom={0}
-          zoomControl={false}
-          crs={L.CRS.EPSG3857}
-        >
-          <WMSTileLayer {...options.wms} crs={L.CRS.EPSG3857} />
-          <FeatureGroup>
-            {options.layers.map(layer => (
-              <CompositeLayer key={layer} name={layer} />
-            ))}
-          </FeatureGroup>
-          <FlightTasksPanel position="topleft" />
-        </LeafletMap>
-      </WithWebSocketConnection>
-    )
+    // <WithWebSocketConnection>
+    <LeafletMap
+      id="root-map"
+      bounds={position.bounds}
+      maxBounds={position.bounds}
+      center={position.origin}
+      zoom={0}
+      zoomControl={false}
+      crs={L.CRS.EPSG3857}
+    >
+      {substrate.service === 'wms' ? (
+        <WMSTileLayer
+          {...substrate.options}
+          crs={substrate.crs === '3857' ? L.CRS.EPSG3857 : L.CRS.EPSG4326}
+        />
+      ) : null}
+      <FeatureGroup>
+        {/* {options.layers.map(layer => (
+            <CompositeLayer key={layer} name={layer} />
+          ))} */}
+      </FeatureGroup>
+      {/* <FlightTasksPanel position="topleft" /> */}
+    </LeafletMap>
+    // </WithWebSocketConnection>
   );
 };
 

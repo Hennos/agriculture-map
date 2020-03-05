@@ -1,9 +1,7 @@
-const origin = 'http://localhost:3002';
+const origin = 'http://localhost';
 
-const urls = Object.freeze({
-  origin: `${origin}`,
-  config: `${origin}/map.config`,
-  services: `${origin}/services`
+export default Object.freeze({
+  services: {
+    graphql: `${origin}:3001/graphql`
+  }
 });
-
-export default { urls };
