@@ -7,9 +7,7 @@ import { GET_MAP_OPTIONS } from './query';
 
 import './index.css';
 
-import CompositeLayer from '../CompositeLayer';
-import WithWebSocketConnection from '../WithWebSocketConnection';
-import FlightTasksPanel from '../FlightTasksPanel';
+import MapLayers from '../MapLayers';
 
 const Map = () => {
   const { loading, error, data } = useQuery(GET_MAP_OPTIONS);
@@ -17,9 +15,11 @@ const Map = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error</p>;
 
-  const { position, substrate } = data;
+  const {
+    position,
+    substrate: { service: subService, crs: subCrs, options: subOptions }
+  } = data;
   return (
-    // <WithWebSocketConnection>
     <LeafletMap
       id="root-map"
       bounds={position.bounds}
@@ -29,20 +29,18 @@ const Map = () => {
       zoomControl={false}
       crs={L.CRS.EPSG3857}
     >
-      {substrate.service === 'wms' ? (
+      {subService === 'wms' ? (
         <WMSTileLayer
-          {...substrate.options}
-          crs={substrate.crs === '3857' ? L.CRS.EPSG3857 : L.CRS.EPSG4326}
+          url={subOptions.url}
+          layers={subOptions.layers}
+          tiled={subOptions.tiled}
+          crs={subCrs === '3857' ? L.CRS.EPSG3857 : L.CRS.EPSG4326}
         />
       ) : null}
       <FeatureGroup>
-        {/* {options.layers.map(layer => (
-            <CompositeLayer key={layer} name={layer} />
-          ))} */}
+        <MapLayers />
       </FeatureGroup>
-      {/* <FlightTasksPanel position="topleft" /> */}
     </LeafletMap>
-    // </WithWebSocketConnection>
   );
 };
 

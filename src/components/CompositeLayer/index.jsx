@@ -1,28 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useQuery } from '@apollo/react-hooks';
 
 import { FeatureGroup } from 'react-leaflet';
 
 import Objects from '../Objects';
 import WithLayerServices from '../WithLayerServices';
-import WithLayerScheme from '../WithLayerScheme';
 
-const CompositeLayer = WithLayerScheme(({ scheme }) => {
-  const { options, childLayers, services, ...layerScheme } = scheme;
+import { GET_MAP_LAYER_SCHEME } from './query';
+
+const CompositeLayer = ({ id }) => {
+  const { loading, error, data } = useQuery(GET_MAP_LAYER_SCHEME, {
+    variables: { id }
+  });
+
+  if (loading || error) return null;
+
+  const { childLayers, services, ...layerScheme } = data.scheme;
   return (
     <FeatureGroup>
-      {childLayers.map(childLayer => (
-        <CompositeLayer key={childLayer} name={childLayer} />
+      {childLayers.map(({ id: childLayer }) => (
+        <CompositeLayer key={childLayer} id={childLayer} />
       ))}
       {WithLayerServices(services, layerScheme, props => (
         <Objects {...props} />
       ))}
     </FeatureGroup>
   );
-});
+};
 
 CompositeLayer.propTypes = {
-  name: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
 };
 
 export default CompositeLayer;

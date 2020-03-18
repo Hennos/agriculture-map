@@ -1,38 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useQuery } from '@apollo/react-hooks';
 
-import WebSocketContext from '../../ws-context';
-import RealtimeDataLoader from '../RealtimeDataLoader';
+import { GET_MAP_LAYER_OBJECTS } from './query';
 
 import types from './types';
 
 const StaticLayerService = ({ layerScheme, children }) => {
-  const { objects } = layerScheme;
+  const { dataSource, objects: objectTypes } = layerScheme;
+  const { loading, error, data } = useQuery(GET_MAP_LAYER_OBJECTS, { variables: { dataSource } });
 
-  const { endpoint } = objects;
-  const schemeOptions = objects.types
-    ? {
-        types: objects.types
-      }
-    : {
-        format: objects.format
-      };
-  return (
-    <WebSocketContext.Consumer>
-      {channels => (
-        <RealtimeDataLoader
-          socket={channels.layersGeodata}
-          options={{
-            layer: endpoint,
-            request: 'ws_ask_layer_objects',
-            response: 'ws_send_layer_objects'
-          }}
-        >
-          {data => children({ collection: data.objects, ...schemeOptions })}
-        </RealtimeDataLoader>
-      )}
-    </WebSocketContext.Consumer>
-  );
+  if (loading || error) return children;
+
+  const { objects } = data.mapLayer;
+
+  return children({ collection: objects, objectTypes });
 };
 
 StaticLayerService.propTypes = {

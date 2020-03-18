@@ -8,12 +8,12 @@ import { EditControl } from 'react-leaflet-draw';
 import { setLocalisationDraw } from './helpers';
 
 const EditableLayerService = ({
-  layer,
+  // layer,
   options: { draw, edit },
-  children,
-  pushCreatedObject,
-  pushChangedObjects,
-  pushRemovedObjects
+  children
+  // pushCreatedObject,
+  // pushChangedObjects,
+  // pushRemovedObjects
 }) => {
   useEffect(() => {
     setLocalisationDraw(L.drawLocal);
