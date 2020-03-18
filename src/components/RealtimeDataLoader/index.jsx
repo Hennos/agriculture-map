@@ -28,7 +28,7 @@ const RealtimeDataLoader = ({ socket, options, children }) => {
 
   const renderData = useCallback(loaded => children(loaded), [data]);
 
-  return <React.Fragment>{data && renderData(data)}</React.Fragment>;
+  return <>{data && renderData(data)}</>;
 };
 
 RealtimeDataLoader.propTypes = {

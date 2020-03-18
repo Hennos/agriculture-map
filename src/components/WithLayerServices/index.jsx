@@ -4,7 +4,7 @@ import LayerService from '../LayerService';
 
 const WithLayerServices = (services, scheme, component) => {
   const RenderedLayer = services.reduce(
-    (fabricate, { service: serviceName, options: serviceOptions }) => props => (
+    (fabricate, { name: serviceName, options: serviceOptions }) => props => (
       <LayerService name={serviceName} options={serviceOptions} layerScheme={scheme}>
         {serviceData => fabricate({ ...props, ...serviceData })}
       </LayerService>

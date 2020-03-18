@@ -1,13 +1,13 @@
 import React from 'react';
+import { useQuery } from '@apollo/react-hooks';
 
-import WithMapServices from '../WithMapServices';
-import StaticDataLoader from '../StaticDataLoader';
+import { GET_MAP_LAYER_SCHEME } from './query';
 
-const WithLayerScheme = Component =>
-  WithMapServices(({ name, services, ...props }) => (
-    <StaticDataLoader url={`${services.static.layersSchemes}/${name}`}>
-      {scheme => <Component name={name} scheme={scheme} {...props} />}
-    </StaticDataLoader>
-  ));
+const WithLayerScheme = ({ id, ...props }) => {
+  const { data } = useQuery(GET_MAP_LAYER_SCHEME, {
+    variables: { id }
+  });
+  return Component => (data ? <Component id={id} scheme={data.scheme} {...props} /> : null);
+};
 
 export default WithLayerScheme;

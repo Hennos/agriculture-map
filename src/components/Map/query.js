@@ -13,4 +13,4 @@ const GET_MAP_OPTIONS = gql`
   }
 `;
 
-export { GET_MAP_OPTIONS };
+export { GET_MAP_OPTIONS }; //eslint-disable-line
