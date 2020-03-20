@@ -8,6 +8,7 @@ const GET_MAP_OPTIONS = gql`
     }
     substrate: getMapSubstrate {
       service
+      crs
       options
     }
   }
