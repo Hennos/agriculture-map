@@ -2,24 +2,38 @@
 
 .map-application {
   line-height: 1;
+  position: relative;
+  display: flex;
   overflow: hidden;
   font-family: arial;
-  display: grid;
   width: 100vw;
   height: 100vh;
 }
 
-.map-application > .map-application-fragment:last-of-type {
-  border-bottom: none;
+.map-application .app-navingation {
+  position: absolute;
+  z-index: 10;
+  margin: 10px;
+  width: 350px;
+  border-radius: 4px;
 }
 
-.map-application > .map-application-fragment {
-  border-bottom: 1px solid black;
+.map-application > aside {
+  position: absolute;
+  z-index: 5;
+  padding: 10px;
+  width: 370px;
+  height: 100vh;
 }
 
-.map-application > .map-application-content {
-  position: relative;
-  display: grid;
+.map-application .app-interacting {
+  margin-top: 60px;
+  width: 100%;
+}
+
+.map-application > main {
+  z-index: 0;
+  flex-grow: 1;
 }
 
 .map-application html,
@@ -178,7 +192,7 @@ q:after {
 .map-application .modal-window-theme {
   border-radius: 4px;
   background-color: white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.35);
 }
 
 .map-application .sr-only {

@@ -2,18 +2,19 @@ import { gql } from 'apollo-boost';
 
 const GET_MAP_LAYER_SCHEME = gql`
   query MapLayerScheme($id: ID!) {
-    scheme: getMapLayerSchemeById(id: $id) {
+    scheme: getMapLayer(id: $id) {
       id
       name
       dataSource
-      childLayers {
+      disabled @client
+      child: childLayers {
         id
       }
-      services {
+      services: servicesSchemes {
         name
         options
       }
-      objects {
+      objectsTypes: objectsSchemes {
         dataSourceFeature
         format
       }

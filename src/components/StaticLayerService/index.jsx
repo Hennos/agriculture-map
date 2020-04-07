@@ -2,19 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from '@apollo/react-hooks';
 
-import { GET_MAP_LAYER_OBJECTS } from './query';
+import { GET_OBJECTS_DATA } from './query';
 
 import types from './types';
 
 const StaticLayerService = ({ layerScheme, children }) => {
-  const { dataSource, objects: objectTypes } = layerScheme;
-  const { loading, error, data } = useQuery(GET_MAP_LAYER_OBJECTS, { variables: { dataSource } });
+  const { id, objectTypes } = layerScheme;
+  const { loading, error, data } = useQuery(GET_OBJECTS_DATA, { variables: { id } });
 
   if (loading || error) return children;
 
-  const { objects } = data.mapLayer;
+  const { objectsGeodata } = data.mapLayer;
 
-  return children({ collection: objects, objectTypes });
+  return children({ collection: objectsGeodata, objectTypes });
 };
 
 StaticLayerService.propTypes = {

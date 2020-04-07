@@ -1,11 +1,12 @@
 import { gql } from 'apollo-boost';
 
-const GET_MAP_LAYER_OBJECTS = gql`
-  query MapLayerObjects($dataSource: ID!) {
-    mapLayer: getMapLayerObjects(layerId: $dataSource) {
-      objects
+const GET_OBJECTS_DATA = gql`
+  query GetObjectsData($id: ID!) {
+    mapLayer: getMapLayer(id: $id) {
+      id
+      objectsGeodata
     }
   }
 `;
 
-export { GET_MAP_LAYER_OBJECTS }; //eslint-disable-line
+export { GET_OBJECTS_DATA }; //eslint-disable-line

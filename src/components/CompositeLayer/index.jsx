@@ -16,16 +16,18 @@ const CompositeLayer = ({ id }) => {
 
   if (loading || error) return null;
 
-  const { childLayers, services, ...layerScheme } = data.scheme;
+  const { disabled, child, services, ...layerScheme } = data.scheme;
   return (
-    <FeatureGroup>
-      {childLayers.map(({ id: childLayer }) => (
-        <CompositeLayer key={childLayer} id={childLayer} />
-      ))}
-      {WithLayerServices(services, layerScheme, props => (
-        <Objects {...props} />
-      ))}
-    </FeatureGroup>
+    !disabled && (
+      <FeatureGroup>
+        {child.map(({ id: childLayer }) => (
+          <CompositeLayer key={childLayer} id={childLayer} />
+        ))}
+        {WithLayerServices(services, layerScheme, props => (
+          <Objects {...props} />
+        ))}
+      </FeatureGroup>
+    )
   );
 };
 

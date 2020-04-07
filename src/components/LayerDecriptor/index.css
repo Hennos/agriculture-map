@@ -1,0 +1,29 @@
+.layer-descriptor {
+  display: flex;
+  align-items: center;
+  height: 50px;
+}
+
+.layer-descriptor > .descriptor-title {
+  padding-left: 10px;
+  padding-right: 10px;
+  flex-grow: 1;
+}
+
+.layer-descriptor .descriptor-button {
+  color: #484848;
+  border-left: 1px solid #c5c5c5;
+}
+
+.layer-descriptor .descriptor-button:hover {
+  cursor: pointer;
+}
+
+/*
+.layer-descriptor > .descriptor-button:focus {
+  cursor: pointer;
+}
+
+.layer-descriptor > .descriptor-button .button-pressed {
+  color: #484848;
+} */

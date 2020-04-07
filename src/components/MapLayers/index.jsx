@@ -4,11 +4,14 @@ import PropTypes from 'prop-types';
 
 import CompositeLayer from '../CompositeLayer';
 
-import { GET_MAP_LAYERS } from './query';
+import { GET_INTERACTING_LAYERS } from './query';
 
 const MapLayers = () => {
-  const { data } = useQuery(GET_MAP_LAYERS);
-  return data ? data.mapLayers.map(({ id }) => <CompositeLayer key={id} id={id} />) : null;
+  const { data, loading, error } = useQuery(GET_INTERACTING_LAYERS);
+
+  if (loading || error) return null;
+
+  return data.mapLayers.map(({ id }) => <CompositeLayer key={id} id={id} />);
 };
 
 MapLayers.propTypes = {

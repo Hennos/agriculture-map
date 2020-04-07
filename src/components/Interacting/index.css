@@ -1,0 +1,6 @@
+.interacting {
+  height: min-content;
+}
+
+.interacting > .interacting-interface {
+}
