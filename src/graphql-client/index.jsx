@@ -1,12 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from '@apollo/react-hooks';
 
-const createClient = ({ uri }) =>
-  new ApolloClient({
-    uri
-  });
+import createClient from './createClient';
 
 const StateProvider = ({ apiURL, children }) => (
   <ApolloProvider client={createClient({ uri: apiURL })}>{children}</ApolloProvider>

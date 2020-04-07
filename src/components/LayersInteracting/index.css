@@ -1,0 +1,6 @@
+.layers-interacting {
+}
+
+.layers-interacting > .interacting-item {
+  border-bottom: 1px solid #c5c5c5;
+}

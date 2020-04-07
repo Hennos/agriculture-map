@@ -1,0 +1,24 @@
+.navingation {
+  height: 50px;
+  background-color: white;
+}
+
+.navingation > .nav-list {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.nav-list > .nav-list-item {
+  color: #c5c5c5;
+  border-right: 1px solid currentColor;
+}
+
+.nav-list .nav-item-button:hover {
+  cursor: pointer;
+  color: #484848;
+}
+
+.nav-list .nav-item-button:focus {
+  color: #484848;
+}
