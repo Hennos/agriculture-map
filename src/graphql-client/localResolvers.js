@@ -15,7 +15,8 @@ const resolvers = {
           }
         `,
         data: {
-          disabled: stateValue
+          disabled: stateValue,
+          __typename: 'MapLayer'
         }
       });
       return null;

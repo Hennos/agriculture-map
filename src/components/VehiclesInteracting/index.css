@@ -1,0 +1,11 @@
+.vehicles-interacting {
+  height: 100%;
+  padding: 0px 6px 6px 6px;
+}
+
+.vehicles-interacting > .vehicles-interacting-element {
+}
+
+.vehicles-interacting > .vehicles-interacting-element:last-of-type {
+  box-shadow: none;
+}

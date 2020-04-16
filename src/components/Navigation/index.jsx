@@ -13,7 +13,7 @@ const Navigation = ({ stylization }) => (
         <NavItem name="layers" stylization="nav-item-button" icon="fas fa-layer-group" />
       </li>
       <li className="nav-list-item">
-        <NavItem name="plains" stylization="nav-item-button" icon="fas fa-plane" />
+        <NavItem name="vehicles" stylization="nav-item-button" icon="fas fa-plane" />
       </li>
     </ul>
   </nav>

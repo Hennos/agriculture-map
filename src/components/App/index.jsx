@@ -8,9 +8,9 @@ import Interacting from '../Interacting';
 
 const App = () => (
   <div className="map-application">
-    <Navigation stylization="app-navingation modal-window-theme" />
     <aside>
-      <Interacting stylization="app-interacting modal-window-theme" />
+      <Navigation stylization="app-navingation modal-window-theme" />
+      <Interacting stylization="app-interacting" />
     </aside>
     <main>
       <Map />

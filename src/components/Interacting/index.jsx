@@ -5,9 +5,7 @@ import { gql } from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
 
 import LayersInteracting from '../LayersInteracting';
-import PlainsInteracting from '../PlainsInteracting';
-
-import './index.css';
+import VehiclesInteracting from '../VehiclesInteracting';
 
 const GET_ACTIVE_INTERACTING = gql`
   {
@@ -16,15 +14,15 @@ const GET_ACTIVE_INTERACTING = gql`
 `;
 
 const Interacting = ({ stylization }) => {
-  const {
-    data: { activeInterating }
-  } = useQuery(GET_ACTIVE_INTERACTING);
-  return (
-    <div className={classNames('interacting', stylization)}>
-      {activeInterating === 'layers' && <LayersInteracting stylization="" />}
-      {activeInterating === 'plains' && <PlainsInteracting stylization="" />}
-    </div>
-  );
+  const { data } = useQuery(GET_ACTIVE_INTERACTING);
+  switch (data.activeInterating) {
+    case 'layers':
+      return <LayersInteracting stylization={classNames('modal-window-theme', stylization)} />;
+    case 'vehicles':
+      return <VehiclesInteracting stylization={classNames('modal-window-theme', stylization)} />;
+    default:
+      return null;
+  }
 };
 
 Interacting.propTypes = {
