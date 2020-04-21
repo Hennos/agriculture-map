@@ -17,11 +17,11 @@ const LayersInteracting = ({ stylization }) => {
   }
 
   return (
-    <div className={classNames('layers-interacting', stylization)}>
+    <section className={classNames('layers-interacting', stylization)}>
       {data.mapLayers.map(({ id }) => (
         <LayerDescriptor key={id} id={id} stylization="interacting-item" />
       ))}
-    </div>
+    </section>
   );
 };
 

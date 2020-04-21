@@ -4,19 +4,23 @@ import classNames from 'classnames';
 
 import './index.css';
 
-const Button = ({ stylization, onClick, children }) => (
-  <button className={classNames('custom-button', stylization)} type="button" onClick={onClick}>
-    {children}
-  </button>
-);
+const Button = ({ name, stylization, onClick, children }) => {
+  return (
+    <button className={classNames('custom-button', stylization)} type="button" onClick={onClick}>
+      {children}
+    </button>
+  );
+};
 
 Button.propTypes = {
+  name: PropTypes.string,
   stylization: PropTypes.string,
   onClick: PropTypes.func,
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.string])
 };
 
 Button.defaultProps = {
+  name: '',
   stylization: '',
   onClick: () => {},
   children: ''

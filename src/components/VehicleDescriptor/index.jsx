@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { useQuery } from '@apollo/react-hooks';
@@ -23,6 +23,7 @@ const controls = [
 ];
 
 const VehicleDescriptor = ({ id, stylization }) => {
+  const [fullTasks, setFullTasks] = useState(false);
   const { data, loading, error } = useQuery(GET_AERIAL_VEHICLE, { variables: { id } });
 
   if (loading || error) return null;
@@ -30,6 +31,7 @@ const VehicleDescriptor = ({ id, stylization }) => {
   const {
     vehicle: { tasks }
   } = data;
+  const taskList = tasks.length <= 1 || fullTasks ? tasks : tasks.slice(0, 1);
   return (
     <div className={classNames('vehicle-descriptor', stylization)}>
       <p className="vehicle-title">
@@ -40,8 +42,24 @@ const VehicleDescriptor = ({ id, stylization }) => {
           </Button>
         ))}
       </p>
-      <ul className="tasks-list">
-        {tasks.map(({ taskId, taskName, steps }) => (
+      <ul className="tasks">
+        {tasks.length > 0 && (
+          <div className="tasks-controls">
+            {tasks.length > 1 && (
+              <Button
+                name="fullTasks"
+                stylization="control-button secondary-control"
+                onClick={() => setFullTasks(!fullTasks)}
+              >
+                {fullTasks ? 'Скрыть задачи' : `Другие задачи (${tasks.length - 1})`}
+              </Button>
+            )}
+            <Button name="addTasks" stylization="control-button main-control" onClick={() => {}}>
+              Новая задача
+            </Button>
+          </div>
+        )}
+        {taskList.map(({ taskId, taskName, steps }) => (
           <li key={taskId} className="task">
             <p className="task-header">
               <span>{taskName}</span>
@@ -51,15 +69,14 @@ const VehicleDescriptor = ({ id, stylization }) => {
             </p>
             {steps.map(({ stepId, stopTime, stepPos }) => (
               <p className="task-step" key={stepId}>
-                <span className="task-step-coordinates">
+                <span>
                   {stepPos.lng} / {stepPos.lat}
                 </span>
-                {stopTime && <span className="task-step-stop-time">{stopTime}</span>}
+                {stopTime && <span>{stopTime}</span>}
               </p>
             ))}
           </li>
         ))}
-        <div className="" />
       </ul>
     </div>
   );

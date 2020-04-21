@@ -16,11 +16,11 @@ const VehiclesInteracting = ({ stylization }) => {
 
   const { vehicles } = data;
   return (
-    <div className={classNames('vehicles-interacting', stylization)}>
+    <section className={classNames('vehicles-interacting', stylization)}>
       {vehicles.map(({ id }) => (
         <VehicleDescriptor key={id} id={id} stylization="vehicles-interacting-element" />
       ))}
-    </div>
+    </section>
   );
 };
 

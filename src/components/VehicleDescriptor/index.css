@@ -3,12 +3,13 @@
   color: #282828;
   display: flex;
   flex-direction: column;
-  background-color: rgb(240, 240, 240);
+  background-color: white;
 }
 
 .vehicle-descriptor .control-button {
   color: #888888;
 }
+
 .vehicle-descriptor .control-button:hover {
   cursor: pointer;
   color: #484848;
@@ -23,6 +24,7 @@
 }
 
 .vehicle-descriptor > .vehicle-title {
+  position: relative;
   width: 100%;
   flex-grow: 0;
   padding-left: 8px;
@@ -34,6 +36,12 @@
   align-items: center;
 }
 
+.vehicle-title > span {
+  padding-left: 8px;
+  padding-right: 8px;
+  margin-right: auto;
+}
+
 .vehicle-title .control-button {
   width: 24px;
   height: 28px;
@@ -43,19 +51,24 @@
   font-size: 14px;
 }
 
-.vehicle-title > span {
-  padding-left: 8px;
-  padding-right: 8px;
-  margin-right: auto;
+.vehicle-title .vehicle-menu {
+  position: relative;
+  top: 28px;
+  right: 0px;
+  width: 100px;
+  height: 100px;
+  background-color: white;
+  border: 1px solid black;
 }
 
-.vehicle-descriptor > .tasks-list {
+.vehicle-descriptor > .tasks {
   flex-grow: 1;
   padding: 8px;
+  background-color: rgb(235, 235, 235);
   box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.25);
 }
 
-.tasks-list > .task {
+.tasks > .task {
   padding: 6px;
   margin-bottom: 8px;
   border-radius: 4px;
@@ -63,7 +76,7 @@
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 }
 
-.tasks-list > .task:last-of-type {
+.tasks > .task:last-of-type {
   margin-bottom: 0px;
 }
 
@@ -84,7 +97,7 @@
 }
 
 .task > .task-step:nth-child(even) {
-  background-color: rgb(240, 240, 240);
+  background-color: rgb(235, 235, 235);
 }
 
 .task-header > span {
@@ -100,4 +113,38 @@
 
 .task-header .control-button i {
   font-size: 14px;
+}
+
+.tasks > .tasks-controls {
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 12px;
+}
+
+.tasks-controls .control-button {
+  margin-right: 6px;
+  color: #282828;
+}
+
+.tasks-controls .main-control {
+  height: 24px;
+  padding-right: 6px;
+  padding-left: 6px;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+.tasks-controls .secondary-control {
+  height: 16px;
+}
+
+.tasks-controls .secondary-control:hover {
+  box-shadow: 0 1px 0px rgba(0, 0, 0, 0.5);
+}
+
+.tasks-controls .control-button:last-of-type {
+  margin-right: 0;
 }

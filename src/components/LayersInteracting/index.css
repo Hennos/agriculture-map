@@ -1,4 +1,5 @@
 .layers-interacting {
+  overflow: auto;
 }
 
 .layers-interacting > .interacting-item {
