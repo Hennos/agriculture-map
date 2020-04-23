@@ -2,14 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ApolloProvider } from '@apollo/react-hooks';
 
-import createClient from './createClient';
+import client from './client';
 
-const StateProvider = ({ apiURL, children }) => (
-  <ApolloProvider client={createClient({ uri: apiURL })}>{children}</ApolloProvider>
-);
+const StateProvider = ({ children }) => <ApolloProvider client={client}>{children}</ApolloProvider>;
 
 StateProvider.propTypes = {
-  apiURL: PropTypes.string.isRequired,
   children: PropTypes.element.isRequired
 };
 

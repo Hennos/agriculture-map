@@ -80,24 +80,21 @@
   margin-bottom: 0px;
 }
 
-.task > .task-header {
-  height: 20px;
-  margin-bottom: 4px;
-  display: flex;
-  align-items: center;
-}
-
 .task > .task-step {
   height: 20px;
   padding-left: 8px;
   padding-right: 8px;
+  font-size: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.task > .task-step:nth-child(even) {
-  background-color: rgb(235, 235, 235);
+.task > .task-header {
+  height: 20px;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
 }
 
 .task-header > span {
@@ -113,6 +110,10 @@
 
 .task-header .control-button i {
   font-size: 14px;
+}
+
+.task > .task-step:nth-child(even) {
+  background-color: rgb(235, 235, 235);
 }
 
 .tasks > .tasks-controls {

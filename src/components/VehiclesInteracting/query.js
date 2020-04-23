@@ -1,4 +1,4 @@
-import { gql } from 'apollo-boost';
+import gql from 'graphql-tag';
 
 const GET_AERIAL_VEHICLES_DATA = gql`
   query AerialVehicles {

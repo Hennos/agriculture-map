@@ -1,4 +1,4 @@
-import { gql } from 'apollo-boost';
+import gql from 'graphql-tag';
 
 const GET_OBJECTS_DATA = gql`
   query GetObjectsData($id: ID!) {

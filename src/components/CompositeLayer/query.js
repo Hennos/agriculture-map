@@ -1,4 +1,4 @@
-import { gql } from 'apollo-boost';
+import gql from 'graphql-tag';
 
 const GET_MAP_LAYER_SCHEME = gql`
   query MapLayerScheme($id: ID!) {

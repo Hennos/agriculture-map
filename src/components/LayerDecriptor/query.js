@@ -1,4 +1,4 @@
-import { gql } from 'apollo-boost';
+import gql from 'graphql-tag';
 
 const GET_LAYER_DESCRIPTOR = gql`
   query MapLayerDescriptor($id: ID!) {

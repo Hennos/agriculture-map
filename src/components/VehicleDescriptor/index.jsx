@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 
 import Button from '../Button';
 
-import { GET_AERIAL_VEHICLE } from './query';
+import { GET_AERIAL_VEHICLE, CANCEL_VEHICLE_TASK, AERIAL_VEHICLE_SUBSCRIPTION } from './query';
 
 import './index.css';
 
@@ -24,7 +24,25 @@ const controls = [
 
 const VehicleDescriptor = ({ id, stylization }) => {
   const [fullTasks, setFullTasks] = useState(false);
-  const { data, loading, error } = useQuery(GET_AERIAL_VEHICLE, { variables: { id } });
+  const { data, loading, error, subscribeToMore } = useQuery(GET_AERIAL_VEHICLE, {
+    variables: { id }
+  });
+  const [cancelVehicleTask] = useMutation(CANCEL_VEHICLE_TASK);
+
+  useEffect(() => {
+    subscribeToMore({
+      document: AERIAL_VEHICLE_SUBSCRIPTION,
+      variables: { id },
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        const { updatedVehicle } = subscriptionData.data;
+        return {
+          ...prev,
+          vehicle: updatedVehicle
+        };
+      }
+    });
+  }, []);
 
   if (loading || error) return null;
 
@@ -63,7 +81,11 @@ const VehicleDescriptor = ({ id, stylization }) => {
           <li key={taskId} className="task">
             <p className="task-header">
               <span>{taskName}</span>
-              <Button name="cancel" stylization="control-button">
+              <Button
+                name="cancel"
+                stylization="control-button"
+                onClick={() => cancelVehicleTask({ variables: { vehicle: id, task: taskId } })}
+              >
                 <i className="fas fa-times" />
               </Button>
             </p>
