@@ -1,0 +1,16 @@
+.vehicle-telemetry {
+  padding: 6px;
+}
+
+.vehicle-telemetry > .telemetry-row {
+  height: 20px;
+  line-height: 20px;
+  padding-left: 8px;
+  padding-right: 8px;
+  font-size: 12px;
+}
+
+.telemetry-row i {
+  font-size: 10px;
+  color: #888888;
+}

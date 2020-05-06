@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 
+import VehicleTelemetry from '../VehicleTelemetry';
 import Button from '../Button';
 
 import { GET_AERIAL_VEHICLE, CANCEL_VEHICLE_TASK, AERIAL_VEHICLE_SUBSCRIPTION } from './query';
@@ -42,12 +43,12 @@ const VehicleDescriptor = ({ id, stylization }) => {
         };
       }
     });
-  }, []);
+  }, [id, subscribeToMore]);
 
   if (loading || error) return null;
 
   const {
-    vehicle: { tasks }
+    vehicle: { telemetry, tasks }
   } = data;
   const taskList = tasks.length <= 1 || fullTasks ? tasks : tasks.slice(0, 1);
   return (
@@ -60,6 +61,7 @@ const VehicleDescriptor = ({ id, stylization }) => {
           </Button>
         ))}
       </p>
+      <VehicleTelemetry stylization="telemetry" telemetry={telemetry} />
       <ul className="tasks">
         {tasks.length > 0 && (
           <div className="tasks-controls">

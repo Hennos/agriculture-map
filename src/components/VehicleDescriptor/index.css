@@ -31,6 +31,7 @@
   padding-right: 8px;
   height: 28px;
   background-color: white;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
 
   display: flex;
   align-items: center;
@@ -90,6 +91,10 @@
   align-items: center;
 }
 
+.task > .task-step:nth-child(even) {
+  background-color: rgb(235, 235, 235);
+}
+
 .task > .task-header {
   height: 20px;
   margin-bottom: 4px;
@@ -110,10 +115,6 @@
 
 .task-header .control-button i {
   font-size: 14px;
-}
-
-.task > .task-step:nth-child(even) {
-  background-color: rgb(235, 235, 235);
 }
 
 .tasks > .tasks-controls {

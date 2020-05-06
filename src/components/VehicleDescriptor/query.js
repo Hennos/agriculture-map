@@ -1,22 +1,33 @@
 import gql from 'graphql-tag';
 
-const GET_AERIAL_VEHICLE = gql`
-  query GetVehicleDescription($id: ID!) {
-    vehicle: getAerialVehicle(id: $id) {
-      tasks {
-        taskId: id
-        taskName: name
-        steps {
-          stepId: id
-          stopTime
-          stepPos: coordinates {
-            lng
-            lat
-          }
+const vehicleDataFragment = gql`
+  fragment VehicleData on AerialVehicle {
+    telemetry {
+      battery
+      lastActivity
+    }
+    tasks {
+      taskId: id
+      taskName: name
+      steps {
+        stepId: id
+        stopTime
+        stepPos: coordinates {
+          lng
+          lat
         }
       }
     }
   }
+`;
+
+const GET_AERIAL_VEHICLE = gql`
+  query GetVehicleDescription($id: ID!) {
+    vehicle: getAerialVehicle(id: $id) {
+      ...VehicleData
+    }
+  }
+  ${vehicleDataFragment}
 `;
 
 const CANCEL_VEHICLE_TASK = gql`
@@ -30,20 +41,10 @@ const CANCEL_VEHICLE_TASK = gql`
 const AERIAL_VEHICLE_SUBSCRIPTION = gql`
   subscription onVehicleUpdated($id: ID!) {
     updatedVehicle(id: $id) {
-      tasks {
-        taskId: id
-        taskName: name
-        steps {
-          stepId: id
-          stopTime
-          stepPos: coordinates {
-            lng
-            lat
-          }
-        }
-      }
+      ...VehicleData
     }
   }
+  ${vehicleDataFragment}
 `;
 
 export { GET_AERIAL_VEHICLE, CANCEL_VEHICLE_TASK, AERIAL_VEHICLE_SUBSCRIPTION }; //eslint-disable-line
