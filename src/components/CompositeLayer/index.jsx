@@ -20,11 +20,11 @@ const CompositeLayer = ({ id }) => {
   return (
     !disabled && (
       <FeatureGroup>
-        {child.map(({ id: childLayer }) => (
-          <CompositeLayer key={childLayer} id={childLayer} />
-        ))}
         {WithLayerServices(services, layerScheme, props => (
           <Objects {...props} />
+        ))}
+        {child.map(({ id: childLayer }) => (
+          <CompositeLayer key={childLayer} id={childLayer} />
         ))}
       </FeatureGroup>
     )
