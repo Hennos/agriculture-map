@@ -1,4 +1,4 @@
-export function setLocalisationDraw(drawLocalVar) {
+function setLocalisation(drawLocalVar) {
   drawLocalVar.draw.toolbar.actions = {
     title: 'Отменить добавление',
     text: 'Отменить'
@@ -39,3 +39,5 @@ export function setLocalisationDraw(drawLocalVar) {
     text: 'Кликните по области участка для его удаления'
   };
 }
+
+export { setLocalisation }; //eslint-disable-line

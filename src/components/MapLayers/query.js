@@ -5,7 +5,6 @@ const GET_INTERACTING_LAYERS = gql`
     mapLayers: getMapLayers {
       id
       parentId
-      disabled @client
     }
   }
 `;

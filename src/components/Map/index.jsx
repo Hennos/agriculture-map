@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import L from 'leaflet';
-import { Map as LeafletMap, WMSTileLayer, FeatureGroup } from 'react-leaflet';
+import { Map as LeafletMap, WMSTileLayer } from 'react-leaflet';
 
 import { GET_MAP_OPTIONS } from './query';
 
@@ -37,9 +37,7 @@ const Map = () => {
           crs={crs}
         />
       ) : null}
-      <FeatureGroup>
-        <MapLayers />
-      </FeatureGroup>
+      <MapLayers />
     </LeafletMap>
   );
 };

@@ -10,11 +10,11 @@ const StaticLayerService = ({ layerScheme, children }) => {
   const { id, objectTypes } = layerScheme;
   const { loading, error, data } = useQuery(GET_OBJECTS_DATA, { variables: { id } });
 
-  if (loading || error) return children;
+  if (loading || error) return null;
 
   const { objectsGeodata } = data.mapLayer;
 
-  return children({ collection: objectsGeodata, objectTypes });
+  return children({ collection: objectsGeodata, types: objectTypes });
 };
 
 StaticLayerService.propTypes = {

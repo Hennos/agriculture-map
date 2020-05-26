@@ -18,9 +18,11 @@ const LayersInteracting = ({ stylization }) => {
 
   return (
     <section className={classNames('layers-interacting', stylization)}>
-      {data.mapLayers.map(({ id }) => (
-        <LayerDescriptor key={id} id={id} stylization="interacting-item" />
-      ))}
+      {data.mapLayers
+        .filter(({ parentId }) => !parentId)
+        .map(({ id }) => (
+          <LayerDescriptor key={id} id={id} stylization="interacting-item" />
+        ))}
     </section>
   );
 };

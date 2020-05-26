@@ -1,25 +1,15 @@
 import gql from 'graphql-tag';
 
-const GET_MAP_LAYER_SCHEME = gql`
-  query MapLayerScheme($id: ID!) {
-    scheme: getMapLayer(id: $id) {
-      id
-      name
-      dataSource
+const GET_COMPOSITE_MAP_LAYER = gql`
+  query CompositeMapLayer($id: ID!) {
+    layerOptions: getMapLayer(id: $id) {
       disabled @client
-      child: childLayers {
-        id
-      }
-      services: servicesSchemes {
-        name
-        options
-      }
-      objectsTypes: objectsSchemes {
-        dataSourceFeature
-        format
-      }
     }
+    unfoldedCompositeLayer: unfoldMapLayerSchemes(id: $id) {
+      id
+    }
+    activeEditing @client
   }
 `;
 
-export { GET_MAP_LAYER_SCHEME }; //eslint-disable-line
+export { GET_COMPOSITE_MAP_LAYER }; //eslint-disable-line

@@ -4,6 +4,7 @@ const GET_MAP_LAYERS = gql`
   {
     mapLayers: getMapLayers {
       id
+      parentId
     }
   }
 `;

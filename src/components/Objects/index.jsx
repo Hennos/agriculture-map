@@ -32,7 +32,7 @@ const Objects = ({ collection, types, format }) => {
       data={collection}
     />
   ) : (
-    <GeoJSON data={collection} />
+    <GeoJSON data={collection} style={format} />
   );
 };
 

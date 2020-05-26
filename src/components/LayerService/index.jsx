@@ -3,13 +3,8 @@ import PropTypes from 'prop-types';
 
 import StaticLayerService from '../StaticLayerService';
 import RealtimeLayerService from '../RealtimeLayerService';
-import EditableLayerService from '../EditableLayerService';
 
-const services = new Map([
-  ['static', StaticLayerService],
-  ['realtime', RealtimeLayerService],
-  ['editable', EditableLayerService]
-]);
+const services = new Map([['static', StaticLayerService], ['realtime', RealtimeLayerService]]);
 
 const LayerService = ({ name, options, layerScheme, children }) => {
   const Service = services.get(name);
@@ -23,8 +18,12 @@ const LayerService = ({ name, options, layerScheme, children }) => {
 LayerService.propTypes = {
   layerScheme: PropTypes.shape({}).isRequired,
   name: PropTypes.string.isRequired,
-  options: PropTypes.shape({}).isRequired,
+  options: PropTypes.shape({}),
   children: PropTypes.func.isRequired
+};
+
+LayerService.defaultProps = {
+  options: {}
 };
 
 export default LayerService;
