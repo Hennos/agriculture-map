@@ -11,7 +11,7 @@
     "hash-sum": "^2.0.0",
     "leaflet": "^1.6.0",
     "leaflet-draw": "^1.0.4",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.23",
     "prop-types": "^15.6.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
